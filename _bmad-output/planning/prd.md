@@ -92,6 +92,14 @@ Most Wordle variants add features outward — sharing, streaks, leaderboards, mu
 - Starting word optimizer — ranked suggestions based on your personal funnel data
 - Calendar heatmap of solve quality over months/years
 
+### Out of Scope (All Phases)
+
+- Social features: sharing, leaderboards, multiplayer, user accounts
+- Server-side data storage or backend of any kind
+- SEO optimization — personal tool, not publicly indexed
+- Push notifications or reminders
+- Monetization
+
 ## Project Scoping & Phased Development
 
 ### MVP Strategy & Philosophy
@@ -262,7 +270,7 @@ Myrdle is a single-page application (SPA) with PWA capabilities, built for perso
 - FR14: The system maintains a complete list of valid 5-letter guess words
 - FR15: The system maintains a curated answer word list (subset of valid words)
 - FR16: The system stores etymology data for every word in the answer word list
-- FR17: The system provides a graceful fallback when no etymology data exists for a given word
+- FR17: The system displays "No etymology available for this word" in the etymology card position when etymology data is missing for an answer word
 
 ### Streak & Progress Tracking
 
@@ -274,14 +282,14 @@ Myrdle is a single-page application (SPA) with PWA capabilities, built for perso
 ### Offline & Persistence
 
 - FR22: The system functions fully offline after the first online load
-- FR23: The system caches the app shell, word list, and etymology data for offline use
-- FR24: The system persists all player data (guess history, streak, settings) in local storage
+- FR23: The system caches all required assets (application code, word list, and etymology data) after first load to enable offline use
+- FR24: The system persists all player data (guess history, streak, settings) locally on the device
 - FR25: The system restores the current day's in-progress puzzle state on page reload
 
 ### Settings
 
 - FR26: The player can enable or disable hard mode
-- FR27: The player can view a color-blind friendly tile color scheme
+- FR27: The player can enable a deuteranopia-optimized tile color scheme (blue for correct position, orange for present but wrong position) as an alternative to the default green/yellow/grey
 
 ### Analytics (Phase 2)
 
@@ -295,16 +303,16 @@ Myrdle is a single-page application (SPA) with PWA capabilities, built for perso
 ### Performance
 
 - NFR1: The app shell loads and is interactive within 2 seconds on a standard home broadband connection on first load
-- NFR2: The app loads and is fully playable within 500ms on subsequent visits (offline, from service worker cache)
+- NFR2: The app loads and is fully playable within 500ms on subsequent visits (offline, from the local offline cache)
 - NFR3: Tile flip feedback after each guess submission completes within 100ms
 - NFR4: The post-solve funnel and etymology card render within 300ms of puzzle completion
-- NFR5: Etymology data for all answer words is pre-compiled at build time — zero runtime network requests during gameplay
+- NFR5: No network requests are made during gameplay — all word data and etymology content is available offline without runtime API calls
 
 ### Accessibility
 
 - NFR6: All interactive elements are reachable and operable via keyboard alone
 - NFR7: Tile state colors (correct, present, absent) meet WCAG AA contrast ratio (4.5:1 minimum)
-- NFR8: A color-blind friendly palette is available as an alternative to the default green/yellow/grey scheme
+- NFR8: The deuteranopia-optimized palette (FR27) uses colors that achieve WCAG AA contrast ratio (4.5:1 minimum) against the tile background
 
 ### Reliability
 
@@ -314,5 +322,5 @@ Myrdle is a single-page application (SPA) with PWA capabilities, built for perso
 
 ### Data Integrity
 
-- NFR12: Local storage data is never silently corrupted — if storage is unavailable or corrupted, the app fails gracefully with a clear message rather than incorrect state
+- NFR12: Persisted player data is never silently corrupted — if device storage is unavailable or corrupted, the app displays an explicit error message (e.g., "Unable to load saved data — your progress may be affected") and renders the board in a clean initial state rather than an incorrect one
 - NFR13: The date-deterministic word selection produces the same answer for a given date regardless of device timezone offset
