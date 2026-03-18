@@ -1,5 +1,5 @@
 ---
-stepsCompleted: []
+stepsCompleted: ['step-01-init']
 inputDocuments: []
 workflowType: 'prd'
 briefCount: 0
