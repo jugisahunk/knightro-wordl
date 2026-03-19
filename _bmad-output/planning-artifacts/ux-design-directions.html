@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myrdle — UX Design Directions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base:          #111118;
+      --bg-surface:       #1a1a22;
+      --tile-border-empty:  #3a3a45;
+      --tile-border-active: #565663;
+      --tile-correct:     #538d4e;
+      --tile-present:     #b59f3b;
+      --tile-absent:      #3a3a45;
+      --text-primary:     #f0f0f0;
+      --text-secondary:   #a0a0aa;
+      --accent-streak:    #9999cc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0f;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Navigation ─────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #0a0a0f;
+      border-bottom: 1px solid #1e1e28;
+      padding: 12px 20px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-label {
+      color: var(--text-secondary);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-right: 6px;
+    }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid #2a2a35;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      padding: 6px 13px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { border-color: #565663; color: var(--text-primary); }
+    .nav-btn.active {
+      background: var(--bg-surface);
+      border-color: var(--accent-streak);
+      color: var(--text-primary);
+    }
+
+    /* ── Screens ─────────────────────────────────── */
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+    .screen.visible { display: flex; }
+
+    /* ── Direction label (bottom) ───────────────── */
+    .dir-label {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(26,26,34,0.92);
+      border: 1px solid #2a2a35;
+      border-radius: 20px;
+      padding: 7px 18px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      z-index: 50;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ── Board ───────────────────────────────────── */
+    .board {
+      display: grid;
+      grid-template-rows: repeat(6, 62px);
+      grid-template-columns: repeat(5, 62px);
+      gap: 5px;
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 2px solid var(--tile-border-empty);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border-radius: 2px;
+      user-select: none;
+    }
+    .tile.filled  { border-color: var(--tile-border-active); }
+    .tile.correct { background: var(--tile-correct); border-color: var(--tile-correct); }
+    .tile.present { background: var(--tile-present); border-color: var(--tile-present); }
+    .tile.absent  { background: var(--tile-absent);  border-color: var(--tile-absent); color: var(--text-secondary); }
+
+    /* ── Keyboard ────────────────────────────────── */
+    .keyboard { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+    .key-row   { display: flex; gap: 6px; }
+    .key {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #252530;
+      color: var(--text-primary);
+      border-radius: 4px;
+      height: 58px;
+      min-width: 43px;
+      padding: 0 4px;
+      user-select: none;
+    }
+    .key.wide   { min-width: 64px; font-size: 11px; font-weight: 500; }
+    .key.correct { background: var(--tile-correct); }
+    .key.present { background: var(--tile-present); }
+    .key.absent  { background: #1e1e28; color: #555560; }
+
+    /* ── Streak ──────────────────────────────────── */
+    .streak { color: var(--accent-streak); font-size: 0.875rem; font-weight: 500; }
+    .streak-num { font-size: 1.125rem; font-weight: 700; }
+
+    /* ── Funnel ──────────────────────────────────── */
+    .funnel { display: flex; flex-direction: column; gap: 7px; width: 100%; }
+    .f-row { display: flex; align-items: center; gap: 10px; }
+    .f-label { font-size: 11px; color: var(--text-secondary); width: 18px; text-align: right; flex-shrink: 0; }
+    .f-track { flex: 1; height: 26px; background: var(--bg-surface); border-radius: 2px; overflow: hidden; }
+    .f-bar {
+      height: 100%;
+      background: var(--tile-correct);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+    }
+    .f-bar.solved { background: var(--accent-streak); }
+    .f-count { font-size: 11px; font-weight: 600; color: #fff; }
+    .f-count-out { font-size: 11px; color: var(--text-secondary); margin-left: 6px; }
+
+    /* ── Etymology card ──────────────────────────── */
+    .etym {
+      background: var(--bg-surface);
+      border: 1px solid #252530;
+      border-radius: 6px;
+      padding: 24px 28px;
+    }
+    .etym-word { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+    .etym-pos  { font-family: 'Lora', serif; font-size: 0.875rem; font-style: italic; color: var(--text-secondary); margin-bottom: 14px; }
+    .etym-body { font-family: 'Lora', serif; font-size: 1.0625rem; line-height: 1.65; }
+    .etym-origin { font-family: 'Lora', serif; font-size: 0.9375rem; font-style: italic; color: var(--text-secondary); line-height: 1.55; margin-top: 10px; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 1 · VOID
+       Board floats in infinite dark. Nothing else.
+    ═══════════════════════════════════════════════ */
+    #d1 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+    #d1 .streak-corner {
+      position: fixed;
+      top: 68px;
+      right: 18px;
+      font-size: 11px;
+      color: #2e2e42;
+    }
+    #d1 .streak-corner .n { color: #5555880; font-weight: 700; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 2 · ALTAR
+       Minimal date + streak above board, vertically ceremonial.
+    ═══════════════════════════════════════════════ */
+    #d2 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0;
+      padding-top: 72px;
+    }
+    #d2 .altar-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-bottom: 20px;
+    }
+    #d2 .date-lbl {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #2e2e42;
+    }
+    #d2 .board { margin-bottom: 16px; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 3 · INSTRUMENT
+       App bar with name, hard-mode badge, streak.
+    ═══════════════════════════════════════════════ */
+    #d3 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      padding-top: 56px;
+    }
+    #d3 .app-bar {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0 12px;
+      border-bottom: 1px solid #1e1e28;
+      margin-bottom: 20px;
+    }
+    #d3 .app-name {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #3a3a55;
+    }
+    #d3 .app-right { display: flex; align-items: center; gap: 14px; }
+    #d3 .hard-badge {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #3a3a50;
+      border: 1px solid #2a2a35;
+      border-radius: 3px;
+      padding: 2px 7px;
+    }
+    #d3 .board { margin-bottom: 16px; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 4 · PROCESSION
+       Post-solve state: board dims → funnel → etymology.
+    ═══════════════════════════════════════════════ */
+    #d4 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      padding: 72px 24px 48px;
+      gap: 0;
+      overflow-y: auto;
+    }
+    #d4 .board { opacity: 0.4; margin-bottom: 28px; }
+    #d4 .section-lbl {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #2e2e42;
+      align-self: flex-start;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 10px;
+    }
+    #d4 .funnel-wrap { width: 100%; max-width: 400px; margin-bottom: 28px; }
+    #d4 .etym { width: 100%; max-width: 400px; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 5 · CANVAS
+       Board lives on a raised surface card.
+    ═══════════════════════════════════════════════ */
+    #d5 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    #d5 .card {
+      background: var(--bg-surface);
+      border: 1px solid #252530;
+      border-radius: 14px;
+      padding: 24px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    #d5 .card-hdr {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #d5 .card-name {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #3a3a52;
+    }
+    /* Tiles sit on surface so use base for empty */
+    #d5 .tile         { background: var(--bg-base); border-color: #252530; }
+    #d5 .tile.filled  { border-color: var(--tile-border-active); }
+    #d5 .tile.correct { background: var(--tile-correct); border-color: var(--tile-correct); }
+    #d5 .tile.present { background: var(--tile-present); border-color: var(--tile-present); }
+    #d5 .tile.absent  { background: #16161e; border-color: #1e1e28; color: #3a3a50; }
+    #d5 .key          { background: #141420; }
+    #d5 .key.absent   { background: #101018; color: #333340; }
+
+    /* ═══════════════════════════════════════════════
+       DIRECTION 6 · CONDENSED
+       Larger tiles, more immersive, game-forward.
+    ═══════════════════════════════════════════════ */
+    #d6 {
+      background: var(--bg-base);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #d6 .board {
+      grid-template-rows: repeat(6, 72px);
+      grid-template-columns: repeat(5, 72px);
+      gap: 6px;
+    }
+    #d6 .tile { font-size: 2.25rem; }
+    #d6 .streak-corner { position: fixed; top: 68px; right: 18px; }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <span class="nav-label">Direction</span>
+  <button class="nav-btn active" onclick="show('d1',this)">1 · Void</button>
+  <button class="nav-btn"        onclick="show('d2',this)">2 · Altar</button>
+  <button class="nav-btn"        onclick="show('d3',this)">3 · Instrument</button>
+  <button class="nav-btn"        onclick="show('d4',this)">4 · Procession</button>
+  <button class="nav-btn"        onclick="show('d5',this)">5 · Canvas</button>
+  <button class="nav-btn"        onclick="show('d6',this)">6 · Condensed</button>
+</nav>
+
+<!-- Shared board macro — injected via template literal in JS below -->
+
+<!-- ════════════════════════════════════════════════
+     D1 · VOID
+════════════════════════════════════════════════ -->
+<div id="d1" class="screen visible">
+  <div class="streak-corner">
+    <span style="color:#404060;font-weight:700;">12</span>
+    <span style="color:#2a2a3a;"> streak</span>
+  </div>
+  <div id="board-d1" class="board"></div>
+  <div id="kb-d1" class="keyboard"></div>
+  <div class="dir-label">1 · Void — board floats in silence, streak nearly invisible</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     D2 · ALTAR
+════════════════════════════════════════════════ -->
+<div id="d2" class="screen">
+  <div class="altar-header">
+    <div class="date-lbl">Wednesday · March 18</div>
+    <div class="streak"><span class="streak-num">12</span> · day streak</div>
+  </div>
+  <div id="board-d2" class="board"></div>
+  <div style="height:16px"></div>
+  <div id="kb-d2" class="keyboard"></div>
+  <div class="dir-label">2 · Altar — date and streak mark the ritual above the board</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     D3 · INSTRUMENT
+════════════════════════════════════════════════ -->
+<div id="d3" class="screen">
+  <div class="app-bar">
+    <div class="app-name">Myrdle</div>
+    <div class="app-right">
+      <div class="hard-badge">Hard</div>
+      <div class="streak"><span class="streak-num">12</span></div>
+    </div>
+  </div>
+  <div id="board-d3" class="board"></div>
+  <div style="height:16px"></div>
+  <div id="kb-d3" class="keyboard"></div>
+  <div class="dir-label">3 · Instrument — minimal app bar; name, mode, streak in one line</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     D4 · PROCESSION (post-solve state)
+════════════════════════════════════════════════ -->
+<div id="d4" class="screen">
+  <!-- Dimmed solved board -->
+  <div id="board-d4" class="board"></div>
+
+  <div class="section-lbl">solve funnel</div>
+  <div class="funnel-wrap">
+    <div class="funnel">
+      <div class="f-row">
+        <div class="f-label">1</div>
+        <div class="f-track"><div class="f-bar" style="width:100%"><span class="f-count">2315</span></div></div>
+      </div>
+      <div class="f-row">
+        <div class="f-label">2</div>
+        <div class="f-track"><div class="f-bar" style="width:13%"><span class="f-count">48</span></div></div>
+      </div>
+      <div class="f-row">
+        <div class="f-label">3</div>
+        <div class="f-track"><div class="f-bar" style="width:4.5%"></div></div>
+        <span class="f-count-out">9</span>
+      </div>
+      <div class="f-row">
+        <div class="f-label">4</div>
+        <div class="f-track"><div class="f-bar" style="width:2%"></div></div>
+        <span class="f-count-out">3</span>
+      </div>
+      <div class="f-row">
+        <div class="f-label">✓</div>
+        <div class="f-track"><div class="f-bar solved" style="width:1%"></div></div>
+        <span class="f-count-out" style="color:var(--accent-streak)">1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-lbl">etymology</div>
+  <div class="etym">
+    <div class="etym-word">Briny</div>
+    <div class="etym-pos">adjective</div>
+    <div class="etym-body">Of, relating to, or resembling brine; very salty.</div>
+    <div class="etym-origin">From Old English <em>brīne</em>, salt water used for preserving. First recorded 1550s. Cognate with Dutch <em>brijn</em>.</div>
+  </div>
+
+  <div class="dir-label">4 · Procession — board dims, funnel reveals, etymology follows</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     D5 · CANVAS
+════════════════════════════════════════════════ -->
+<div id="d5" class="screen">
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-name">Myrdle</div>
+      <div class="streak"><span class="streak-num">12</span></div>
+    </div>
+    <div id="board-d5" class="board"></div>
+    <div id="kb-d5" class="keyboard"></div>
+  </div>
+  <div class="dir-label">5 · Canvas — board lives on a raised surface card</div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     D6 · CONDENSED
+════════════════════════════════════════════════ -->
+<div id="d6" class="screen">
+  <div class="streak-corner streak"><span class="streak-num">12</span></div>
+  <div id="board-d6" class="board"></div>
+  <div id="kb-d6" class="keyboard"></div>
+  <div class="dir-label">6 · Condensed — larger tiles, more immersive</div>
+</div>
+
+<script>
+  /* ── Board state ────────────────────────────────
+     Mid-game: guess CRANE (R✓ N✓ C✗ A✗ E✗)
+               guess SPINY (I✓ N✓ Y✓ S✗ P✗)
+               active row: typed B R _ _ _
+  ───────────────────────────────────────────────── */
+  const rows = [
+    [{l:'C',s:'absent'},{l:'R',s:'correct'},{l:'A',s:'absent'},{l:'N',s:'correct'},{l:'E',s:'absent'}],
+    [{l:'S',s:'absent'},{l:'P',s:'absent'}, {l:'I',s:'correct'},{l:'N',s:'correct'},{l:'Y',s:'correct'}],
+    [{l:'B',s:'filled'},{l:'R',s:'filled'}, {l:'',s:''},{l:'',s:''},{l:'',s:''}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+  ];
+
+  // Solved state for d4
+  const rowsSolved = [
+    [{l:'C',s:'absent'},{l:'R',s:'correct'},{l:'A',s:'absent'},{l:'N',s:'correct'},{l:'E',s:'absent'}],
+    [{l:'S',s:'absent'},{l:'P',s:'absent'}, {l:'I',s:'correct'},{l:'N',s:'correct'},{l:'Y',s:'correct'}],
+    [{l:'B',s:'correct'},{l:'R',s:'correct'},{l:'I',s:'correct'},{l:'N',s:'correct'},{l:'Y',s:'correct'}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+    [{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''},{l:'',s:''}],
+  ];
+
+  function buildBoard(id, data) {
+    const el = document.getElementById(id);
+    data.forEach(row => row.forEach(({l, s}) => {
+      const t = document.createElement('div');
+      t.className = 'tile' + (s ? ' ' + s : '');
+      t.textContent = l;
+      el.appendChild(t);
+    }));
+  }
+
+  /* ── Keyboard rows ──────────────────────────── */
+  const kb = [
+    ['Q','W','E','R','T','Y','U','I','O','P'],
+    ['A','S','D','F','G','H','J','K','L'],
+    ['ENTER','Z','X','C','V','B','N','M','⌫'],
+  ];
+  // Key states derived from board
+  const keyState = {
+    C:'absent', R:'correct', A:'absent', N:'correct', E:'absent',
+    S:'absent', P:'absent', I:'correct', Y:'correct',
+    B:'filled',
+  };
+
+  function buildKb(id) {
+    const el = document.getElementById(id);
+    kb.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'key-row';
+      row.forEach(k => {
+        const btn = document.createElement('div');
+        const st = keyState[k] || '';
+        btn.className = 'key' + (k.length > 1 ? ' wide' : '') + (st ? ' ' + st : '');
+        btn.textContent = k;
+        rowEl.appendChild(btn);
+      });
+      el.appendChild(rowEl);
+    });
+  }
+
+  // Build boards & keyboards
+  buildBoard('board-d1', rows);
+  buildBoard('board-d2', rows);
+  buildBoard('board-d3', rows);
+  buildBoard('board-d4', rowsSolved);
+  buildBoard('board-d5', rows);
+  buildBoard('board-d6', rows);
+
+  buildKb('kb-d1');
+  buildKb('kb-d2');
+  buildKb('kb-d3');
+  // d4 has no keyboard (post-solve)
+  buildKb('kb-d5');
+  buildKb('kb-d6');
+
+  /* ── Navigation ─────────────────────────────── */
+  function show(id, btn) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('visible');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
