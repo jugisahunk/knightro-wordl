@@ -14,22 +14,22 @@ classification:
   scale: 'single user, personal'
 ---
 
-# Product Requirements Document - Myrdle
+# Product Requirements Document - Myrdl
 
 **Author:** Lord Farquaad
 **Date:** 2026-03-18
 
-> **Myrdle** — *My Wordle.* A personal word mastery ritual.
+> **Myrdl** — *My Wordle.* A personal word mastery ritual.
 
 ## Executive Summary
 
-Myrdle is a personal, browser-based daily word puzzle — a Wordle clone built for a single user who treats the daily solve as a deliberate practice ritual, not casual entertainment. The product serves one clearly defined need: structured self-improvement in word deduction, supported by vocabulary enrichment, without any social or competitive layer.
+Myrdl is a personal, browser-based daily word puzzle — a Wordle clone built for a single user who treats the daily solve as a deliberate practice ritual, not casual entertainment. The product serves one clearly defined need: structured self-improvement in word deduction, supported by vocabulary enrichment, without any social or competitive layer.
 
 The core user loop is: solve the daily puzzle using a methodical guessing technique → review a post-solve funnel showing how efficiently the solution space was eliminated → absorb a brief etymology card for the answer word. Over time, aggregated analytics surface the user's technique fingerprint — where their strategy is strong, where it stalls, and whether they're improving.
 
 ### What Makes This Special
 
-Most Wordle variants add features outward — sharing, streaks, leaderboards, multiplayer. Myrdle adds features *inward*. The differentiator is a private performance mirror: analytics that reveal how a specific person thinks under constraint, not how they rank against others. The etymology card deepens vocabulary retention in the moment of highest engagement — immediately after a solve — without disrupting the minimalist ritual feel. There is no audience. The only feedback loop is between the user and their own improving capability.
+Most Wordle variants add features outward — sharing, streaks, leaderboards, multiplayer. Myrdl adds features *inward*. The differentiator is a private performance mirror: analytics that reveal how a specific person thinks under constraint, not how they rank against others. The etymology card deepens vocabulary retention in the moment of highest engagement — immediately after a solve — without disrupting the minimalist ritual feel. There is no audience. The only feedback loop is between the user and their own improving capability.
 
 ## Project Classification
 
@@ -122,7 +122,7 @@ Most Wordle variants add features outward — sharing, streaks, leaderboards, mu
 
 ### Journey 1: The Morning Ritual (Happy Path)
 
-It's 7:14am. Lord Farquaad opens his laptop with coffee in hand. He navigates to Myrdle — it loads instantly, offline cache doing its job. Today's puzzle is waiting, clean and familiar.
+It's 7:14am. Lord Farquaad opens his laptop with coffee in hand. He navigates to Myrdl — it loads instantly, offline cache doing its job. Today's puzzle is waiting, clean and familiar.
 
 He types his opener — CRANE, as always — and watches the tiles flip. Two yellows. He's already thinking. Second guess tightens the frame. Third guess and the funnel is closing fast. Fifth guess: solved.
 
@@ -150,7 +150,7 @@ Streak resets to zero. No drama. Tomorrow is another puzzle.
 
 ### Journey 3: First Launch — Getting Started
 
-First time opening Myrdle. No history, no cache yet. He loads the app on his home connection — the service worker installs, etymologies cache silently in the background. Today's puzzle is ready.
+First time opening Myrdl. No history, no cache yet. He loads the app on his home connection — the service worker installs, etymologies cache silently in the background. Today's puzzle is ready.
 
 No tutorial. No onboarding wizard. The board is there, the keyboard is there. He knows how Wordle works. He plays.
 
@@ -193,7 +193,7 @@ He closes the stats. Tomorrow he'll try committing earlier at guess 3.
 
 #### Solution-Space Funnel as Personal Performance Metric
 
-The core innovation in Myrdle is treating each guess not as a move toward a solution, but as an information event with a measurable yield. By tracking valid word count remaining after each guess (e.g. `2315 → 48 → 9 → 3 → SOLVED`), Myrdle makes the *efficiency of deduction* visible — something no mainstream Wordle clone surfaces. Over time, the shape of this funnel becomes a personal technique fingerprint: a quantified, evolving picture of how a specific person thinks under constraint.
+The core innovation in Myrdl is treating each guess not as a move toward a solution, but as an information event with a measurable yield. By tracking valid word count remaining after each guess (e.g. `2315 → 48 → 9 → 3 → SOLVED`), Myrdl makes the *efficiency of deduction* visible — something no mainstream Wordle clone surfaces. Over time, the shape of this funnel becomes a personal technique fingerprint: a quantified, evolving picture of how a specific person thinks under constraint.
 
 This is a new interaction pattern in the daily word puzzle genre: from outcome reporting to process analysis.
 
@@ -216,7 +216,7 @@ Embedding the etymology card as the natural close of the solve ritual — not a 
 
 ### Project-Type Overview
 
-Myrdle is a single-page application (SPA) with PWA capabilities, built for personal daily use in Chrome. No server required — all data is local. The app is designed for local-only deployment initially, with a clean path to static hosting (GitHub Pages, Netlify) in the future without architectural changes.
+Myrdl is a single-page application (SPA) with PWA capabilities, built for personal daily use in Chrome. No server required — all data is local. The app is designed for local-only deployment initially, with a clean path to static hosting (GitHub Pages, Netlify) in the future without architectural changes.
 
 ### Technical Architecture Considerations
 

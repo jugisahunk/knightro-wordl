@@ -16,7 +16,7 @@ inputDocuments: ["_bmad-output/planning/prd.md"]
 
 ### Project Vision
 
-Myrdle is a personal daily word puzzle built as a private practice ritual for a single user. The core loop — solve, review funnel, read etymology — is the complete product. Features go *inward* (self-improvement, reflection) not outward (sharing, competition). The funnel is not a stats screen; it is a mirror of how the user thinks under constraint. Myrdle shows you how you think, not just whether you won.
+Myrdl is a personal daily word puzzle built as a private practice ritual for a single user. The core loop — solve, review funnel, read etymology — is the complete product. Features go *inward* (self-improvement, reflection) not outward (sharing, competition). The funnel is not a stats screen; it is a mirror of how the user thinks under constraint. Myrdl shows you how you think, not just whether you won.
 
 ### Target Users
 
@@ -37,7 +37,7 @@ Myrdle is a personal daily word puzzle built as a private practice ritual for a 
 
 ### Design Opportunities
 
-1. **Funnel as signature visual** — Unique to Myrdle. A narrowing silhouette or proportional bar form makes guess efficiency readable as shape. Wide bars = hard word; fast taper = sharp technique.
+1. **Funnel as signature visual** — Unique to Myrdl. A narrowing silhouette or proportional bar form makes guess efficiency readable as shape. Wide bars = hard word; fast taper = sharp technique.
 2. **Sound as ritual punctuation — A / E Lydian:**
    - **Solve:** A bowl, single note, full resonance — clean, grounded, complete
    - **Fail:** A bowl strike resolving to E Lydian chord (E, G#, A#, B) — otherworldly, open, curious; the raised fourth encodes *mystery remains*, not defeat
@@ -50,7 +50,7 @@ Myrdle is a personal daily word puzzle built as a private practice ritual for a 
 
 ### Defining Experience
 
-The core of Myrdle is typing a guess. That single action — thinking of a word, typing it, watching the tiles flip — is the entire product in miniature. Every other decision in the design serves the quality of that moment.
+The core of Myrdl is typing a guess. That single action — thinking of a word, typing it, watching the tiles flip — is the entire product in miniature. Every other decision in the design serves the quality of that moment.
 
 After the last guess, the product takes over. The user doesn't navigate to a results screen; the ritual sequence runs itself: bowl rings → funnel appears → etymology card settles. The user's only job is to receive.
 
@@ -84,7 +84,7 @@ The keyboard is the primary interface. The design must ensure the keyboard is al
 ### Experience Principles
 
 1. **The board is the whole world** — During the solve, nothing else exists. No distractions, no chrome, no UI outside the board and keyboard.
-2. **The ritual sequence is automatic** — After the last guess, Myrdle leads. The user follows. No navigation required between solve, funnel, and etymology.
+2. **The ritual sequence is automatic** — After the last guess, Myrdl leads. The user follows. No navigation required between solve, funnel, and etymology.
 3. **Shape before data** — Visual communication precedes numerical. The funnel, the board state, the streak — all should be readable by form before text is processed.
 4. **One thing at a time** — Solve, then funnel, then etymology. Never simultaneously. The sequence *is* the experience.
 5. **The sound is the transition** — The bowl ring is not feedback; it is the UX transition mechanic from play to reflection. It marks time.
@@ -93,7 +93,7 @@ The keyboard is the primary interface. The design must ensure the keyboard is al
 
 ### Primary Emotional Goals
 
-The master emotional target for Myrdle is **quiet capability** — the feeling of a craftsperson reviewing their own work. Not triumph, not entertainment, not social validation. The user should finish each daily ritual feeling self-aware and grounded: *I see how I think. I did this.*
+The master emotional target for Myrdl is **quiet capability** — the feeling of a craftsperson reviewing their own work. Not triumph, not entertainment, not social validation. The user should finish each daily ritual feeling self-aware and grounded: *I see how I think. I did this.*
 
 Supporting emotional register:
 
@@ -155,7 +155,7 @@ Supporting emotional register:
 
 **What it does well:** The entire application is operable at the speed of thought for a keyboard user. Nothing interrupts the keyboard flow. `?` reveals the full shortcut map on demand — it teaches when asked, never when not. Power users never touch the mouse. The depth is there if you want it; invisible if you don't.
 
-**The pattern to transfer:** The daily Myrdle ritual — guess, bowl, funnel, etymology, return to board — is completable entirely via keyboard. The depth is available; it never announces itself.
+**The pattern to transfer:** The daily Myrdl ritual — guess, bowl, funnel, etymology, return to board — is completable entirely via keyboard. The depth is available; it never announces itself.
 
 #### Miro Boards — Peripheral Controls, Central Canvas
 
@@ -187,7 +187,7 @@ Supporting emotional register:
 
 - **Dense homepage syndrome** (myNoise inverse) — the game view is sacred; complexity lives elsewhere, never on the board
 - **Gamification/marketing interruptions** (Gmail's Promotions tab, social nudges) — no upsells, no "share this", no "invite a friend" surfaces anywhere
-- **Social pressure UI** (Miro's "invite collaborators" CTA) — Myrdle is a solo instrument; no collaborative affordances, not even vestigially
+- **Social pressure UI** (Miro's "invite collaborators" CTA) — Myrdl is a solo instrument; no collaborative affordances, not even vestigially
 
 ### Design Inspiration Strategy
 
@@ -214,7 +214,7 @@ Supporting emotional register:
 
 **Tailwind CSS** — utility-first CSS framework, all components hand-crafted.
 
-No component library. Every visual element in Myrdle (game tiles, funnel bars, etymology card, keyboard, streak display) is bespoke by nature and built from scratch. Tailwind provides the utility layer: spacing, typography, color tokens, responsive helpers.
+No component library. Every visual element in Myrdl (game tiles, funnel bars, etymology card, keyboard, streak display) is bespoke by nature and built from scratch. Tailwind provides the utility layer: spacing, typography, color tokens, responsive helpers.
 
 ### Rationale for Selection
 
@@ -251,9 +251,9 @@ Define a custom Tailwind theme in `tailwind.config.js`:
 
 > "Type a guess, watch the tiles reveal — then see how you think."
 
-Myrdle's defining experience is the tile submission and reveal cycle. It is the most repeated interaction in the product — up to six times per session, every day. If this moment feels exactly right, the rest of the ritual is earned. If it feels wrong, nothing downstream recovers it.
+Myrdl's defining experience is the tile submission and reveal cycle. It is the most repeated interaction in the product — up to six times per session, every day. If this moment feels exactly right, the rest of the ritual is earned. If it feels wrong, nothing downstream recovers it.
 
-The post-solve ritual sequence (bowl → funnel → etymology) is Myrdle's invention. But it is built on the foundation of a Wordle tile flip that feels correct. That is the thing to get right.
+The post-solve ritual sequence (bowl → funnel → etymology) is Myrdl's invention. But it is built on the foundation of a Wordle tile flip that feels correct. That is the thing to get right.
 
 ### User Mental Model
 
@@ -573,7 +573,7 @@ Failed solve and successful solve receive identical post-solve treatment: same d
 
 **Tailwind CSS provides:** spacing utilities, color tokens, typography scale, animation duration helpers, responsive prefixes. No UI components.
 
-**All components are custom-built** using Tailwind utilities against the defined design tokens. This is expected and appropriate for Myrdle — no standard component library contains a Wordle game board, solution-space funnel, or meditation bowl trigger.
+**All components are custom-built** using Tailwind utilities against the defined design tokens. This is expected and appropriate for Myrdl — no standard component library contains a Wordle game board, solution-space funnel, or meditation bowl trigger.
 
 ### Custom Components
 
@@ -603,7 +603,7 @@ Failed solve and successful solve receive identical post-solve treatment: same d
 
 **Behavior:** Tracks active row. Passes letter and state data to each Tile. On invalid submission, applies shake animation to the active row only (~300ms, translateX keyframes). No scroll, no overflow — fixed size, always fully visible.
 
-**Accessibility:** `role="grid"`, `aria-label="Myrdle game board"`. Each row `role="row"`.
+**Accessibility:** `role="grid"`, `aria-label="Myrdl game board"`. Each row `role="row"`.
 
 ---
 
@@ -769,7 +769,7 @@ PostSolveTransition — sequences board dim → SoundManager trigger → FunnelC
 
 ### Feedback Patterns
 
-Myrdle's feedback vocabulary is deliberately narrow. Every feedback event uses the same language: motion for errors, color for state, sound for transitions.
+Myrdl's feedback vocabulary is deliberately narrow. Every feedback event uses the same language: motion for errors, color for state, sound for transitions.
 
 | Event | Feedback | Notes |
 | --- | --- | --- |
@@ -808,7 +808,7 @@ All animations are deliberate and unhurried. Nothing bounces. Nothing pulses. Ev
 
 ### Overlay Patterns
 
-Myrdle has two overlays: SettingsPanel and ShortcutOverlay. Neither is a modal.
+Myrdl has two overlays: SettingsPanel and ShortcutOverlay. Neither is a modal.
 
 **Rules for all overlays:**
 
@@ -877,7 +877,7 @@ Myrdle has two overlays: SettingsPanel and ShortcutOverlay. Neither is a modal.
 
 ### Responsive Strategy
 
-Myrdle is **desktop-first by design**. Chrome desktop is the primary platform. Mobile is not required but must not be broken.
+Myrdl is **desktop-first by design**. Chrome desktop is the primary platform. Mobile is not required but must not be broken.
 
 | Viewport | Strategy |
 | --- | --- |
@@ -890,7 +890,7 @@ The board (~350px wide) and keyboard (~350px wide) fit within any viewport ≥ 4
 
 ### Breakpoint Strategy
 
-Myrdle needs one functional accommodation:
+Myrdl needs one functional accommodation:
 
 ```css
 /* Default: desktop layout — board centered, fixed streak corner */
@@ -964,7 +964,7 @@ Tailwind `sm` breakpoint (640px) used only for minor spacing adjustments if need
 
 ```html
 <main>
-  <div role="grid" aria-label="Myrdle game board">
+  <div role="grid" aria-label="Myrdl game board">
     <div role="row">
       <div role="gridcell" class="tile" aria-label="R, correct">R</div>
     </div>
