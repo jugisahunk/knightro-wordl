@@ -41,6 +41,7 @@ project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
 # story 2.4 created
+# story 2.5 created
 
 
 project_key: NOKEY
@@ -57,13 +58,13 @@ development_status:
   epic-1-retrospective: done
 
   # Epic 2: Playable Daily Puzzle
-  epic-2: in-progress
+  epic-2: done
   2-1-design-tokens-and-app-layout-shell: done
   2-2-tile-and-gameboard-components: done
   2-3-on-screen-keyboard-component: done
   2-4-gameplay-loop-and-physical-keyboard: done
-  2-5-streak-badge: backlog
-  epic-2-retrospective: optional
+  2-5-streak-badge: done
+  epic-2-retrospective: done
 
   # Epic 3: The Post-Solve Ritual
   epic-3: backlog

@@ -6,6 +6,7 @@ import GameBoard from '@/components/game/GameBoard.vue'
 import GameKeyboard from '@/components/game/GameKeyboard.vue'
 import { useKeyboard } from '@/composables/useKeyboard'
 import { GamePhase } from '@/types/game'
+import StreakBadge from '@/components/ui/StreakBadge.vue'
 
 const store = useGameStore()
 const settingsStore = useSettingsStore()
@@ -75,7 +76,7 @@ useKeyboard(handleKeyPress)
 
   <!-- Top-right reserved corner: StreakBadge + SettingsPanel wired in 2.5 -->
   <!-- Outside game-root to avoid overflow:hidden breaking position:fixed -->
-  <div class="corner-reserved"></div>
+  <div class="corner-reserved"><StreakBadge /></div>
 </template>
 
 <style scoped>
