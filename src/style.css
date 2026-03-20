@@ -1,3 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
-/* @theme design tokens added in Story 2.1 */
+@theme {
+  /* Color tokens */
+  --color-bg-base: #111118;
+  --color-bg-surface: #1a1a22;
+  --color-tile-border-empty: #3a3a45;
+  --color-tile-border-active: #565663;
+  --color-tile-correct: #538d4e;
+  --color-tile-present: #b59f3b;
+  --color-tile-absent: #3a3a45;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #a0a0aa;
+  --color-accent-streak: #9999cc;
+  --color-tile-correct-d: #4a90d9;
+  --color-tile-present-d: #e8a030;
+
+  /* Duration tokens */
+  --duration-tile-flip: 400ms;
+  --duration-tile-stagger: 100ms;
+  --duration-board-dim: 500ms;
+  --duration-funnel-fade: 300ms;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Scope Lora to etymology card elements */
+.lora,
+[data-lora] {
+  font-family: 'Lora', serif;
+}

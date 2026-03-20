@@ -1,4 +1,4 @@
-# Story 1.3: Game Engine Composable & Algorithm Tests
+# Story 1.3: Game Engine Composable and Algorithm Tests
 
 Status: done
 

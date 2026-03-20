@@ -1,4 +1,4 @@
-# Story 1.1: Project Scaffold & Toolchain Setup
+# Story 1.1: Project Scaffold and Toolchain Setup
 
 Status: done
 

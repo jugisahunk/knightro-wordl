@@ -136,7 +136,7 @@ FR31: Epic 6 — Past puzzle browser (Phase 2)
 
 ## Epic List
 
-### Epic 1: Foundation & Verified Game Engine
+### Epic 1: Foundation and Verified Game Engine
 
 The project is scaffolded, the static data pipeline is built and validated, and the Wordle elimination algorithm is fully unit-tested. No UI exists yet, but correctness of the core logic — elimination, date-deterministic word selection, hard mode constraints — is guaranteed before any interface is built on top of it.
 
@@ -158,7 +158,7 @@ After completing the puzzle (solve or fail), the complete ritual sequence runs a
 
 **UX-DRs covered:** UX-DR8, UX-DR9, UX-DR10, UX-DR13, UX-DR14, UX-DR15
 
-### Epic 4: Persistence, Streak & Offline
+### Epic 4: Persistence, Streak and Offline
 
 The app remembers everything across sessions. Streak increments and resets correctly. An interrupted puzzle restores on reload. The app works fully offline after first visit. Storage corruption surfaces as a clear message — never silent breakage.
 
@@ -166,7 +166,7 @@ The app remembers everything across sessions. Streak increments and resets corre
 
 **NFRs addressed:** NFR2, NFR9, NFR10, NFR11, NFR12, NFR13
 
-### Epic 5: Settings, Accessibility & Polish
+### Epic 5: Settings, Accessibility and Polish
 
 Hard mode is toggleable (with mid-puzzle lockout), the deuteranopia palette is live-switchable, keyboard shortcuts are discoverable via `?`, and the full accessibility baseline — WCAG AA, reduced-motion support, screen reader aria — is met.
 
@@ -176,7 +176,7 @@ Hard mode is toggleable (with mid-puzzle lockout), the deuteranopia palette is l
 
 **UX-DRs covered:** UX-DR2, UX-DR12, UX-DR13, UX-DR16
 
-### Epic 6: Analytics & History (Phase 2)
+### Epic 6: Analytics and History (Phase 2)
 
 Lord Farquaad can review his technique fingerprint — aggregated funnel history over time, starting word effectiveness, and a browser for past puzzles and their etymologies. The private performance mirror comes online.
 
@@ -184,11 +184,11 @@ Lord Farquaad can review his technique fingerprint — aggregated funnel history
 
 ---
 
-## Epic 1: Foundation & Verified Game Engine — Stories
+## Epic 1: Foundation and Verified Game Engine — Stories
 
 The project is scaffolded, the static data pipeline is built and validated, and the Wordle elimination algorithm is fully unit-tested. No UI exists yet, but correctness of the core logic — elimination, date-deterministic word selection, hard mode constraints — is guaranteed before any interface is built on top of it.
 
-### Story 1.1: Project Scaffold & Toolchain Setup
+### Story 1.1: Project Scaffold and Toolchain Setup
 
 As a developer,
 I want the project scaffolded with the full agreed toolchain,
@@ -261,7 +261,7 @@ So that the game engine has correct, complete input data and missing etymology e
 
 ---
 
-### Story 1.3: Game Engine Composable & Algorithm Tests
+### Story 1.3: Game Engine Composable and Algorithm Tests
 
 As a developer,
 I want `useGameEngine` implemented as a pure TypeScript composable with full Vitest coverage,
@@ -306,7 +306,7 @@ So that the elimination algorithm, tile state derivation, and date logic are pro
 
 ---
 
-### Story 1.4: Pinia Stores & Persistence Schema
+### Story 1.4: Pinia Stores and Persistence Schema
 
 As a developer,
 I want the three Pinia stores implemented with correct boundaries and the localStorage schema established,
@@ -354,7 +354,7 @@ So that all subsequent UI stories have reactive state and safe persistence to bu
 
 Lord Farquaad can open the app and play today's word puzzle to completion — typing guesses with his physical keyboard, watching tiles reveal, playing in hard mode if desired. A streak badge is visible. The app reveals the answer if he fails. The full Void+Altar layout is in place.
 
-### Story 2.1: Design Tokens & App Layout Shell
+### Story 2.1: Design Tokens and App Layout Shell
 
 As a player,
 I want the app to open with the correct dark palette, typography, and centered board layout,
@@ -385,7 +385,7 @@ So that the visual foundation of the ritual is in place before any gameplay is w
 
 ---
 
-### Story 2.2: Tile & GameBoard Components
+### Story 2.2: Tile and GameBoard Components
 
 As a player,
 I want to see a 6×5 game board with tiles that fill as I type and flip to reveal colors on submission,
@@ -453,7 +453,7 @@ So that I can play using either the physical keyboard or the on-screen keys.
 
 ---
 
-### Story 2.4: Gameplay Loop & Physical Keyboard
+### Story 2.4: Gameplay Loop and Physical Keyboard
 
 As a player,
 I want to type guesses with my physical keyboard, see tile reveals, and have the game enforce all rules correctly,
@@ -568,7 +568,7 @@ So that the bowl ring is the sensory signal that separates gameplay from reflect
 
 ---
 
-### Story 3.2: FunnelChart & FunnelBar Components
+### Story 3.2: FunnelChart and FunnelBar Components
 
 As a player,
 I want to see a proportional funnel visualization of how the solution space narrowed with each guess,
@@ -683,11 +683,11 @@ So that the transition from play to reflection is seamless and the sequence is t
 
 ---
 
-## Epic 4: Persistence, Streak & Offline — Stories
+## Epic 4: Persistence, Streak and Offline — Stories
 
 The app remembers everything across sessions. Streak increments and resets correctly. An interrupted puzzle restores on reload. The app works fully offline after first visit. Storage corruption surfaces as a clear message — never silent breakage.
 
-### Story 4.1: Game State Persistence & Restore
+### Story 4.1: Game State Persistence and Restore
 
 As a player,
 I want my puzzle progress saved automatically and restored when I return to the app,
@@ -753,7 +753,7 @@ So that the quiet motivator reflects my actual daily practice accurately.
 
 ---
 
-### Story 4.3: PWA Service Worker & Offline Caching
+### Story 4.3: PWA Service Worker and Offline Caching
 
 As a player,
 I want the app to load instantly and work completely offline after my first visit,
@@ -821,11 +821,11 @@ So that a storage failure never leaves me with a broken or silently incorrect ga
 
 ---
 
-## Epic 5: Settings, Accessibility & Polish — Stories
+## Epic 5: Settings, Accessibility and Polish — Stories
 
 Hard mode is toggleable (with mid-puzzle lockout), the deuteranopia palette is live-switchable, keyboard shortcuts are discoverable via `?`, and the full accessibility baseline — WCAG AA, reduced-motion support, screen reader aria — is met.
 
-### Story 5.1: SettingsPanel & Hard Mode Toggle
+### Story 5.1: SettingsPanel and Hard Mode Toggle
 
 As a player,
 I want to toggle hard mode from a peripheral corner panel without interrupting my puzzle,
@@ -885,7 +885,7 @@ So that tile state feedback is always unambiguous regardless of how I perceive r
 
 ---
 
-### Story 5.3: ShortcutOverlay & Keyboard Navigation Audit
+### Story 5.3: ShortcutOverlay and Keyboard Navigation Audit
 
 As a player,
 I want to discover all keyboard shortcuts via `?` and complete my entire daily ritual without touching a mouse,
@@ -918,7 +918,7 @@ So that the app rewards keyboard fluency and never requires pointer input.
 
 ---
 
-### Story 5.4: Accessibility Audit & Reduced-Motion Support
+### Story 5.4: Accessibility Audit and Reduced-Motion Support
 
 As a player,
 I want the app to respect my motion preferences and be fully usable by screen readers,
@@ -960,7 +960,7 @@ So that the experience is accessible regardless of sensory or motor constraints.
 
 ---
 
-## Epic 6: Analytics & History — Stories
+## Epic 6: Analytics and History — Stories
 
 Lord Farquaad can review his technique fingerprint — aggregated funnel history over time, starting word effectiveness, and a browser for past puzzles and their etymologies. The private performance mirror comes online.
 

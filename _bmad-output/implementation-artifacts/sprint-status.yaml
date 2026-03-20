@@ -1,6 +1,7 @@
 # generated: 2026-03-19
 # last_updated: 2026-03-20
 # project: knightro-wordle
+
 # project_key: NOKEY
 # tracking_system: file-system
 # story_location: _bmad-output/implementation-artifacts
@@ -44,48 +45,48 @@ tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
 
 development_status:
-  # Epic 1: Foundation & Verified Game Engine
+  # Epic 1: Foundation and Verified Game Engine
   epic-1: done
-  1-1-project-scaffold-toolchain-setup: done
+  1-1-project-scaffold-and-toolchain-setup: done
   1-2-static-data-pipeline: done
-  1-3-game-engine-composable-algorithm-tests: done
-  1-4-pinia-stores-persistence-schema: done
-  epic-1-retrospective: optional
+  1-3-game-engine-composable-and-algorithm-tests: done
+  1-4-pinia-stores-and-persistence-schema: done
+  epic-1-retrospective: done
 
   # Epic 2: Playable Daily Puzzle
-  epic-2: backlog
-  2-1-design-tokens-app-layout-shell: backlog
-  2-2-tile-gameboard-components: backlog
+  epic-2: in-progress
+  2-1-design-tokens-and-app-layout-shell: done
+  2-2-tile-and-gameboard-components: backlog
   2-3-on-screen-keyboard-component: backlog
-  2-4-gameplay-loop-physical-keyboard: backlog
+  2-4-gameplay-loop-and-physical-keyboard: backlog
   2-5-streak-badge: backlog
   epic-2-retrospective: optional
 
   # Epic 3: The Post-Solve Ritual
   epic-3: backlog
   3-1-soundmanager: backlog
-  3-2-funnelchart-funnelbar-components: backlog
+  3-2-funnelchart-and-funnelbar-components: backlog
   3-3-etymologycard-component: backlog
   3-4-postsolvetransition-orchestration: backlog
   epic-3-retrospective: optional
 
-  # Epic 4: Persistence, Streak & Offline
+  # Epic 4: Persistence, Streak and Offline
   epic-4: backlog
-  4-1-game-state-persistence-restore: backlog
+  4-1-game-state-persistence-and-restore: backlog
   4-2-streak-logic: backlog
-  4-3-pwa-service-worker-offline-caching: backlog
+  4-3-pwa-service-worker-and-offline-caching: backlog
   4-4-storage-corruption-handling: backlog
   epic-4-retrospective: optional
 
-  # Epic 5: Settings, Accessibility & Polish
+  # Epic 5: Settings, Accessibility and Polish
   epic-5: backlog
-  5-1-settingspanel-hard-mode-toggle: backlog
+  5-1-settingspanel-and-hard-mode-toggle: backlog
   5-2-deuteranopia-palette-toggle: backlog
-  5-3-shortcutoverlay-keyboard-navigation-audit: backlog
-  5-4-accessibility-audit-reduced-motion-support: backlog
+  5-3-shortcutoverlay-and-keyboard-navigation-audit: backlog
+  5-4-accessibility-audit-and-reduced-motion-support: backlog
   epic-5-retrospective: optional
 
-  # Epic 6: Analytics & History
+  # Epic 6: Analytics and History
   epic-6: backlog
   6-1-analytics-data-foundation: backlog
   6-2-aggregated-funnel-history-view: backlog

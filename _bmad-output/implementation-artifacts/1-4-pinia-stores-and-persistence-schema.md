@@ -1,4 +1,4 @@
-# Story 1.4: Pinia Stores & Persistence Schema
+# Story 1.4: Pinia Stores and Persistence Schema
 
 Status: done
 
