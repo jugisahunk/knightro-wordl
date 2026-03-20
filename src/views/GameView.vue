@@ -4,6 +4,8 @@ import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import GameBoard from '@/components/game/GameBoard.vue'
 import GameKeyboard from '@/components/game/GameKeyboard.vue'
+import { useKeyboard } from '@/composables/useKeyboard'
+import { GamePhase } from '@/types/game'
 
 const store = useGameStore()
 const settingsStore = useSettingsStore()
@@ -46,6 +48,8 @@ function handleKeyPress(key: string): void {
     store.typeChar(key)
   }
 }
+
+useKeyboard(handleKeyPress)
 </script>
 
 <template>
@@ -58,6 +62,11 @@ function handleKeyPress(key: string): void {
         :active-row="store.activeRow"
         :shaking-row="store.invalidGuessShake"
       />
+      <p
+        v-show="store.gamePhase === GamePhase.LOST"
+        class="answer-reveal"
+        aria-live="polite"
+      >{{ store.answerWord.toUpperCase() }}</p>
     </div>
     <div class="keyboard-area">
       <GameKeyboard :letter-states="letterStates" @key-press="handleKeyPress" />
@@ -90,6 +99,8 @@ function handleKeyPress(key: string): void {
 
 .board-area {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   padding-top: 10vh;
 }
@@ -99,5 +110,15 @@ function handleKeyPress(key: string): void {
   justify-content: center;
   margin-top: 16px;
   padding-bottom: 20px;
+}
+
+.answer-reveal {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 </style>

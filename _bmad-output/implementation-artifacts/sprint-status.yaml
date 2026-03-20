@@ -40,6 +40,7 @@ last_updated: 2026-03-20
 project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
+# story 2.4 created
 
 
 project_key: NOKEY
@@ -60,7 +61,7 @@ development_status:
   2-1-design-tokens-and-app-layout-shell: done
   2-2-tile-and-gameboard-components: done
   2-3-on-screen-keyboard-component: done
-  2-4-gameplay-loop-and-physical-keyboard: backlog
+  2-4-gameplay-loop-and-physical-keyboard: done
   2-5-streak-badge: backlog
   epic-2-retrospective: optional
 
