@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
@@ -6,12 +6,21 @@ import GameView from './GameView.vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { GamePhase } from '@/types/game'
 
+const startBackground = vi.fn()
+const playBell = vi.fn()
+
+vi.mock('@/composables/useAudio', () => ({
+  useAudio: () => ({ startBackground, playBell }),
+}))
+
 describe('GameView', () => {
   let pinia: ReturnType<typeof createPinia>
 
   beforeEach(() => {
     pinia = createPinia()
     setActivePinia(pinia)
+    startBackground.mockClear()
+    playBell.mockClear()
   })
 
   describe('answer-reveal', () => {
@@ -42,6 +51,52 @@ describe('GameView', () => {
       useGameStore().boardState.gamePhase = GamePhase.WON
       await nextTick()
       expect(wrapper.find('.answer-reveal').isVisible()).toBe(false)
+      wrapper.unmount()
+    })
+  })
+
+  describe('audio', () => {
+    it('calls startBackground on first keypress', async () => {
+      const wrapper = mount(GameView, { global: { plugins: [pinia] } })
+      await nextTick()
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+      expect(startBackground).toHaveBeenCalledTimes(1)
+      wrapper.unmount()
+    })
+
+    it('calls startBackground on every keypress (idempotency handled inside composable)', async () => {
+      const wrapper = mount(GameView, { global: { plugins: [pinia] } })
+      await nextTick()
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }))
+      expect(startBackground).toHaveBeenCalledTimes(2)
+      wrapper.unmount()
+    })
+
+    it('calls playBell when gamePhase transitions to WON', async () => {
+      const wrapper = mount(GameView, { global: { plugins: [pinia] } })
+      await nextTick()
+      useGameStore().boardState.gamePhase = GamePhase.WON
+      await nextTick()
+      expect(playBell).toHaveBeenCalledTimes(1)
+      wrapper.unmount()
+    })
+
+    it('does not call playBell when gamePhase transitions to LOST', async () => {
+      const wrapper = mount(GameView, { global: { plugins: [pinia] } })
+      await nextTick()
+      useGameStore().boardState.gamePhase = GamePhase.LOST
+      await nextTick()
+      expect(playBell).not.toHaveBeenCalled()
+      wrapper.unmount()
+    })
+
+    it('does not call playBell while still PLAYING', async () => {
+      const wrapper = mount(GameView, { global: { plugins: [pinia] } })
+      await nextTick()
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }))
+      await nextTick()
+      expect(playBell).not.toHaveBeenCalled()
       wrapper.unmount()
     })
   })

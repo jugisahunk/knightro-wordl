@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import GameBoard from '@/components/game/GameBoard.vue'
@@ -7,9 +7,18 @@ import GameKeyboard from '@/components/game/GameKeyboard.vue'
 import { useKeyboard } from '@/composables/useKeyboard'
 import { GamePhase } from '@/types/game'
 import StreakBadge from '@/components/ui/StreakBadge.vue'
+import { useAudio } from '@/composables/useAudio'
 
 const store = useGameStore()
 const settingsStore = useSettingsStore()
+const audio = useAudio()
+
+watch(
+  () => store.gamePhase,
+  (phase) => {
+    if (phase === GamePhase.WON) audio.playBell()
+  },
+)
 
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10)
@@ -41,6 +50,7 @@ const letterStates = computed(() => {
 })
 
 function handleKeyPress(key: string): void {
+  audio.startBackground()
   if (key === 'Enter') {
     store.submitGuess(settingsStore.hardMode)
   } else if (key === 'Backspace') {
