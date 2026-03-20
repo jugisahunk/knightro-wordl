@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
+import { useSettingsStore } from '@/stores/useSettingsStore'
 import GameBoard from '@/components/game/GameBoard.vue'
+import GameKeyboard from '@/components/game/GameKeyboard.vue'
 
 const store = useGameStore()
+const settingsStore = useSettingsStore()
 
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10)
@@ -12,6 +15,37 @@ function getTodayUTC(): string {
 onMounted(() => {
   store.initGame(getTodayUTC())
 })
+
+const letterStates = computed(() => {
+  const states: Record<string, 'correct' | 'present' | 'absent'> = {}
+  const priority = { correct: 3, present: 2, absent: 1 } as const
+
+  store.boardState.guesses.forEach((guess, rowIdx) => {
+    const tileResult = store.boardState.tileStates[rowIdx]
+    if (!tileResult) return
+    for (let i = 0; i < guess.length; i++) {
+      const letter = guess[i].toLowerCase()
+      const state = tileResult[i]
+      if (state === 'correct' || state === 'present' || state === 'absent') {
+        const existing = states[letter]
+        if (!existing || priority[state] > priority[existing]) {
+          states[letter] = state
+        }
+      }
+    }
+  })
+  return states
+})
+
+function handleKeyPress(key: string): void {
+  if (key === 'Enter') {
+    store.submitGuess(settingsStore.hardMode)
+  } else if (key === 'Backspace') {
+    store.deleteLast()
+  } else {
+    store.typeChar(key)
+  }
+}
 </script>
 
 <template>
@@ -24,6 +58,9 @@ onMounted(() => {
         :active-row="store.activeRow"
         :shaking-row="store.invalidGuessShake"
       />
+    </div>
+    <div class="keyboard-area">
+      <GameKeyboard :letter-states="letterStates" @key-press="handleKeyPress" />
     </div>
   </main>
 
@@ -55,5 +92,12 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   padding-top: 10vh;
+}
+
+.keyboard-area {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding-bottom: 20px;
 }
 </style>

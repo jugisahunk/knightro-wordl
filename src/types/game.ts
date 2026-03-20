@@ -1,4 +1,5 @@
 export type TileState = 'empty' | 'filled' | 'correct' | 'present' | 'absent'
+export type KeyState = 'default' | 'correct' | 'present' | 'absent'
 
 export const enum GamePhase {
   PLAYING,
