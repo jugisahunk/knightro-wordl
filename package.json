@@ -1,0 +1,55 @@
+{
+  "name": "knightro-wordle",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "tsx scripts/validate-data.ts",
+    "build": "vite build",
+    "type-check": "vue-tsc --build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --cache",
+    "format": "prettier --write src/",
+    "test:unit": "vitest",
+    "test:e2e": "playwright test --pass-with-no-tests",
+    "validate-data": "tsx scripts/validate-data.ts"
+  },
+  "dependencies": {
+    "pinia": "^3.0.4",
+    "vue": "^3.5.29",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/jsdom": "^28.0.0",
+    "@types/node": "^24.11.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vitest/eslint-plugin": "^1.6.9",
+    "@vue/eslint-config-typescript": "^14.7.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.8.1",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.8.0",
+    "eslint-plugin-vue": "~10.8.0",
+    "jiti": "^2.6.1",
+    "jsdom": "^28.1.0",
+    "prettier": "3.8.1",
+    "tailwindcss": "^4.2.2",
+    "tsx": "^4.19.4",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-plugin-vue-devtools": "^8.0.6",
+    "vitest": "^4.0.18",
+    "vue-tsc": "^3.2.5",
+    "word-list": "^4.1.0",
+    "wordle-wordlist": "^1.0.1"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
