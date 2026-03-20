@@ -1,8 +1,29 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useGameStore } from '@/stores/useGameStore'
+import GameBoard from '@/components/game/GameBoard.vue'
+
+const store = useGameStore()
+
+function getTodayUTC(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
+onMounted(() => {
+  store.initGame(getTodayUTC())
+})
+</script>
+
 <template>
   <main class="game-root">
-    <!-- Board placeholder: centered, upper-center of viewport -->
     <div class="board-area">
-      <div class="board-placeholder"></div>
+      <GameBoard
+        :tile-states="store.boardState.tileStates"
+        :guesses="store.boardState.guesses"
+        :current-input="store.currentInput"
+        :active-row="store.activeRow"
+        :shaking-row="store.invalidGuessShake"
+      />
     </div>
   </main>
 
@@ -34,11 +55,5 @@
   display: flex;
   justify-content: center;
   padding-top: 10vh;
-}
-
-.board-placeholder {
-  width: 350px;
-  /* 5×6 grid: 62px tiles + 5px gaps = 350px */
-  min-width: 0;
 }
 </style>

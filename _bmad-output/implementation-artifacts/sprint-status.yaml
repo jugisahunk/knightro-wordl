@@ -38,6 +38,7 @@
 generated: 2026-03-19
 last_updated: 2026-03-20
 project: knightro-wordle
+# story 2.2 review complete
 
 
 project_key: NOKEY
@@ -56,7 +57,7 @@ development_status:
   # Epic 2: Playable Daily Puzzle
   epic-2: in-progress
   2-1-design-tokens-and-app-layout-shell: done
-  2-2-tile-and-gameboard-components: backlog
+  2-2-tile-and-gameboard-components: done
   2-3-on-screen-keyboard-component: backlog
   2-4-gameplay-loop-and-physical-keyboard: backlog
   2-5-streak-badge: backlog
