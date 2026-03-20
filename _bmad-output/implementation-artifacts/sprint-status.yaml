@@ -45,11 +45,11 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # Epic 1: Foundation & Verified Game Engine
-  epic-1: in-progress
+  epic-1: done
   1-1-project-scaffold-toolchain-setup: done
   1-2-static-data-pipeline: done
-  1-3-game-engine-composable-algorithm-tests: review
-  1-4-pinia-stores-persistence-schema: backlog
+  1-3-game-engine-composable-algorithm-tests: done
+  1-4-pinia-stores-persistence-schema: done
   epic-1-retrospective: optional
 
   # Epic 2: Playable Daily Puzzle
