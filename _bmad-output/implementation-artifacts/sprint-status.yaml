@@ -36,7 +36,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-19
-last_updated: 2026-03-20
+last_updated: 2026-03-20 (story 3.3 done)
 project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
@@ -44,6 +44,7 @@ project: knightro-wordle
 # story 2.5 created
 # story 3.1 created
 # story 3.2 created
+# story 3.3 created
 
 
 project_key: NOKEY
@@ -72,7 +73,7 @@ development_status:
   epic-3: in-progress
   3-1-soundmanager: done
   3-2-funnelchart-and-funnelbar-components: done
-  3-3-etymologycard-component: backlog
+  3-3-etymologycard-component: done
   3-4-postsolvetransition-orchestration: backlog
   epic-3-retrospective: optional
 
