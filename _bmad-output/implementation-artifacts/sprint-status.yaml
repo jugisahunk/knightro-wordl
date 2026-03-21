@@ -36,7 +36,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-19
-last_updated: 2026-03-20 (story 3.3 done)
+last_updated: 2026-03-21 (story 3.4 done)
 project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
@@ -70,11 +70,11 @@ development_status:
   epic-2-retrospective: done
 
   # Epic 3: The Post-Solve Ritual
-  epic-3: in-progress
+  epic-3: done
   3-1-soundmanager: done
   3-2-funnelchart-and-funnelbar-components: done
   3-3-etymologycard-component: done
-  3-4-postsolvetransition-orchestration: backlog
+  3-4-postsolvetransition-orchestration: done
   epic-3-retrospective: optional
 
   # Epic 4: Persistence, Streak and Offline

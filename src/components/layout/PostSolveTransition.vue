@@ -1,0 +1,76 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useGameStore } from '@/stores/useGameStore'
+import { GamePhase } from '@/types/game'
+import FunnelChart from '@/components/post-solve/FunnelChart.vue'
+import EtymologyCard from '@/components/post-solve/EtymologyCard.vue'
+import etymologyJson from '@/data/etymology.json'
+import type { EtymologyEntry } from '@/types/etymology'
+
+defineProps<{
+  showFunnel: boolean
+  showEtymology: boolean
+  dismiss: () => void
+}>()
+
+const gameStore = useGameStore()
+
+const etymologyEntry = computed((): EtymologyEntry | null => {
+  const key = gameStore.answerWord.toUpperCase()
+  const data = etymologyJson as Record<string, EtymologyEntry>
+  return data[key] ?? null
+})
+
+const isSolved = computed(() => gameStore.gamePhase === GamePhase.WON)
+</script>
+
+<template>
+  <div class="post-solve-container">
+    <Transition name="funnel">
+      <FunnelChart
+        v-if="showFunnel"
+        :funnel-data="gameStore.funnelData"
+        :solved="isSolved"
+      />
+    </Transition>
+    <Transition name="etymology">
+      <EtymologyCard
+        v-if="showEtymology"
+        :word="gameStore.answerWord"
+        :entry="etymologyEntry"
+        @dismiss="dismiss"
+      />
+    </Transition>
+  </div>
+</template>
+
+<style scoped>
+.post-solve-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.funnel-enter-active {
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+.funnel-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.funnel-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.etymology-enter-active {
+  transition: opacity 400ms ease;
+}
+.etymology-enter-from {
+  opacity: 0;
+}
+.etymology-enter-to {
+  opacity: 1;
+}
+</style>

@@ -13,6 +13,17 @@ vi.mock('@/composables/useAudio', () => ({
   useAudio: () => ({ startBackground, playBell }),
 }))
 
+vi.mock('@/composables/usePostSolveTransition', () => ({
+  usePostSolveTransition: () => ({
+    phase: { value: 'idle' },
+    boardDimmed: { value: false },
+    showFunnel: { value: false },
+    showEtymology: { value: false },
+    advanceToEtymology: vi.fn(),
+    dismiss: vi.fn(),
+  }),
+}))
+
 describe('GameView', () => {
   let pinia: ReturnType<typeof createPinia>
 
@@ -73,12 +84,12 @@ describe('GameView', () => {
       wrapper.unmount()
     })
 
-    it('calls playBell when gamePhase transitions to WON', async () => {
+    it('does not call playBell when gamePhase transitions to WON (sound owned by usePostSolveTransition)', async () => {
       const wrapper = mount(GameView, { global: { plugins: [pinia] } })
       await nextTick()
       useGameStore().boardState.gamePhase = GamePhase.WON
       await nextTick()
-      expect(playBell).toHaveBeenCalledTimes(1)
+      expect(playBell).not.toHaveBeenCalled()
       wrapper.unmount()
     })
 

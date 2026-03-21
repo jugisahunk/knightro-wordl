@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import GameBoard from '@/components/game/GameBoard.vue'
@@ -8,17 +8,14 @@ import { useKeyboard } from '@/composables/useKeyboard'
 import { GamePhase } from '@/types/game'
 import StreakBadge from '@/components/ui/StreakBadge.vue'
 import { useAudio } from '@/composables/useAudio'
+import { usePostSolveTransition } from '@/composables/usePostSolveTransition'
+import PostSolveTransition from '@/components/layout/PostSolveTransition.vue'
+import { BOARD_DIM_MS } from '@/constants/timing'
 
 const store = useGameStore()
 const settingsStore = useSettingsStore()
 const audio = useAudio()
-
-watch(
-  () => store.gamePhase,
-  (phase) => {
-    if (phase === GamePhase.WON) audio.playBell()
-  },
-)
+const postSolve = usePostSolveTransition()
 
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10)
@@ -65,7 +62,10 @@ useKeyboard(handleKeyPress)
 
 <template>
   <main class="game-root">
-    <div class="board-area">
+    <div
+      class="board-area"
+      :style="{ opacity: postSolve.boardDimmed.value ? 0.4 : 1, transition: `opacity ${BOARD_DIM_MS}ms ease` }"
+    >
       <GameBoard
         :tile-states="store.boardState.tileStates"
         :guesses="store.boardState.guesses"
@@ -79,6 +79,11 @@ useKeyboard(handleKeyPress)
         aria-live="polite"
       >{{ store.answerWord.toUpperCase() }}</p>
     </div>
+    <PostSolveTransition
+      :show-funnel="postSolve.showFunnel.value"
+      :show-etymology="postSolve.showEtymology.value"
+      :dismiss="postSolve.dismiss"
+    />
     <div class="keyboard-area">
       <GameKeyboard :letter-states="letterStates" @key-press="handleKeyPress" />
     </div>
