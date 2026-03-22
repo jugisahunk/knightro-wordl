@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { usePersistenceStore } from '@/stores/usePersistenceStore'
 
 const persistenceStore = usePersistenceStore()
-const count = ref(persistenceStore.loadStreak().count)
+const count = computed(() => persistenceStore.streakData.count)
 </script>
 
 <template>

@@ -33,6 +33,17 @@ const DEFAULT_STREAK: StreakData = { count: 0, lastSolvedDate: '' }
 export const usePersistenceStore = defineStore('persistence', () => {
   const storageError = ref(false)
 
+  const streakData = ref<StreakData>((() => {
+    try {
+      const raw = localStorage.getItem(KEYS.streak)
+      if (!raw) return { ...DEFAULT_STREAK }
+      return JSON.parse(raw) as StreakData
+    } catch {
+      storageError.value = true
+      return { ...DEFAULT_STREAK }
+    }
+  })())
+
   function loadSettings(): SettingsData {
     try {
       const raw = localStorage.getItem(KEYS.settings)
@@ -62,9 +73,42 @@ export const usePersistenceStore = defineStore('persistence', () => {
   }
 
   function saveStreak(data: StreakData): void {
+    streakData.value = { ...data }
     if (!safeWrite(KEYS.streak, data)) {
       storageError.value = true
     }
+  }
+
+  function isYesterdayUTC(dateStr: string, todayStr: string): boolean {
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/
+    if (!datePattern.test(dateStr) || !datePattern.test(todayStr)) return false
+    const today = new Date(todayStr + 'T00:00:00Z')
+    const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
+    return yesterday.toISOString().slice(0, 10) === dateStr
+  }
+
+  function updateStreakOnWin(todayDate: string): void {
+    const updated: StreakData = {
+      count: streakData.value.count + 1,
+      lastSolvedDate: todayDate,
+    }
+    saveStreak(updated)
+  }
+
+  function updateStreakOnLoss(): void {
+    const updated: StreakData = {
+      count: 0,
+      lastSolvedDate: streakData.value.lastSolvedDate,
+    }
+    saveStreak(updated)
+  }
+
+  function checkAndMaybeResetStreak(todayDate: string): void {
+    const last = streakData.value.lastSolvedDate
+    if (!last) return
+    if (last === todayDate) return
+    if (isYesterdayUTC(last, todayDate)) return
+    saveStreak({ count: 0, lastSolvedDate: last })
   }
 
   function loadGame(date: string): GameRecord | null {
@@ -96,10 +140,14 @@ export const usePersistenceStore = defineStore('persistence', () => {
 
   return {
     storageError,
+    streakData,
     loadSettings,
     saveSettings,
     loadStreak,
     saveStreak,
+    updateStreakOnWin,
+    updateStreakOnLoss,
+    checkAndMaybeResetStreak,
     loadGame,
     saveGame,
     readKey,

@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import StreakBadge from './StreakBadge.vue'
+import { usePersistenceStore } from '@/stores/usePersistenceStore'
 
 describe('StreakBadge', () => {
   let pinia: ReturnType<typeof createPinia>
@@ -61,5 +63,16 @@ describe('StreakBadge', () => {
     localStorage.setItem('myrdle_streak', JSON.stringify({ count: 1, lastSolvedDate: '2026-03-20' }))
     const wrapper = mount(StreakBadge, { global: { plugins: [pinia] } })
     expect(wrapper.find('.streak-badge').attributes('aria-label')).toBe('Current streak: 1 day')
+  })
+
+  it('updates count reactively when persistenceStore.streakData.count changes', async () => {
+    const wrapper = mount(StreakBadge, { global: { plugins: [pinia] } })
+    expect(wrapper.text()).toBe('0')
+
+    const store = usePersistenceStore()
+    store.updateStreakOnWin('2026-03-21')
+    await nextTick()
+
+    expect(wrapper.text()).toBe('1')
   })
 })

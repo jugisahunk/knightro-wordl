@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
+import { usePersistenceStore } from '@/stores/usePersistenceStore'
 import GameBoard from '@/components/game/GameBoard.vue'
 import GameKeyboard from '@/components/game/GameKeyboard.vue'
 import { useKeyboard } from '@/composables/useKeyboard'
@@ -16,13 +17,20 @@ const store = useGameStore()
 const settingsStore = useSettingsStore()
 const audio = useAudio()
 const postSolve = usePostSolveTransition()
+const persistenceStore = usePersistenceStore()
 
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10)
 }
 
 onMounted(() => {
-  store.initGame(getTodayUTC())
+  const date = getTodayUTC()
+  const record = persistenceStore.loadGame(date)
+  if (record) {
+    store.restoreFromRecord(date, record)
+  } else {
+    store.initGame(date)
+  }
 })
 
 const letterStates = computed(() => {
@@ -62,6 +70,7 @@ useKeyboard(handleKeyPress)
 
 <template>
   <main class="game-root">
+    <p v-if="persistenceStore.storageError" class="storage-error">Unable to load saved data — your progress may be affected</p>
     <div
       class="board-area"
       :style="{ opacity: postSolve.boardDimmed.value ? 0.4 : 1, transition: `opacity ${BOARD_DIM_MS}ms ease` }"
@@ -126,6 +135,12 @@ useKeyboard(handleKeyPress)
   justify-content: center;
   margin-top: 16px;
   padding-bottom: 20px;
+}
+
+.storage-error {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
 }
 
 .answer-reveal {

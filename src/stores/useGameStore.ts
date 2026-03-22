@@ -4,9 +4,12 @@ import { useGameEngine } from '../composables/useGameEngine'
 import { GamePhase } from '../types/game'
 import type { GuessResult, BoardState } from '../types/game'
 import { MAX_GUESSES } from '../constants/game'
+import { usePersistenceStore } from './usePersistenceStore'
+import type { GameRecord } from '../types/persistence'
 
 export const useGameStore = defineStore('game', () => {
   const engine = useGameEngine()
+  const persistenceStore = usePersistenceStore()
 
   // Reactive state only — no game logic lives here
   const boardState = ref<BoardState>({
@@ -42,6 +45,7 @@ export const useGameStore = defineStore('game', () => {
     activeRow.value = 0
     currentInput.value = ''
     funnelData.value = []
+    persistenceStore.checkAndMaybeResetStreak(date)
   }
 
   function restoreGame(
@@ -62,6 +66,13 @@ export const useGameStore = defineStore('game', () => {
     activeRow.value = guesses.length
     funnelData.value = funnel
     currentInput.value = ''
+  }
+
+  function restoreFromRecord(date: string, record: GameRecord): void {
+    const answer = engine.getAnswerForDate(date)
+    const tileStates = record.guesses.map((guess) => engine.getTileStates(guess, answer))
+    restoreGame(date, record.guesses, tileStates, record.funnelData, record.solved)
+    persistenceStore.checkAndMaybeResetStreak(date)
   }
 
   function typeChar(char: string): void {
@@ -112,6 +123,18 @@ export const useGameStore = defineStore('game', () => {
     funnelData.value = newFunnel
     currentInput.value = ''
 
+    persistenceStore.saveGame(todayDate.value, {
+      guesses: newGuesses,
+      solved: won,
+      funnelData: newFunnel,
+    })
+
+    if (won) {
+      persistenceStore.updateStreakOnWin(todayDate.value)
+    } else if (lost) {
+      persistenceStore.updateStreakOnLoss()
+    }
+
     return { valid: true, hardModeViolation: false }
   }
 
@@ -138,6 +161,7 @@ export const useGameStore = defineStore('game', () => {
     // Actions
     initGame,
     restoreGame,
+    restoreFromRecord,
     typeChar,
     deleteLast,
     submitGuess,
