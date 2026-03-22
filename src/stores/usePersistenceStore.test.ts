@@ -4,6 +4,7 @@ import { usePersistenceStore } from './usePersistenceStore'
 
 const GAME_KEY = (date: string) => `myrdle_game_${date}`
 const STREAK_KEY = 'myrdle_streak'
+const SETTINGS_KEY = 'myrdle_settings'
 
 describe('usePersistenceStore', () => {
   beforeEach(() => {
@@ -125,6 +126,69 @@ describe('usePersistenceStore', () => {
       expect(store.streakData.count).toBe(0)
       store.updateStreakOnWin('2026-03-21')
       expect(store.streakData.count).toBe(1)
+    })
+  })
+
+  describe('store initialization', () => {
+    it('sets storageError on store instantiation when myrdle_streak is malformed', () => {
+      localStorage.setItem(STREAK_KEY, '{invalid-json')
+      const store = usePersistenceStore()
+      expect(store.storageError).toBe(true)
+      expect(store.streakData.count).toBe(0)
+      expect(store.streakData.lastSolvedDate).toBe('')
+    })
+  })
+
+  describe('loadStreak', () => {
+    it('sets storageError and returns default on malformed JSON', () => {
+      const store = usePersistenceStore()
+      localStorage.setItem(STREAK_KEY, 'not-valid-json{{{')
+      const result = store.loadStreak()
+      expect(result).toEqual({ count: 0, lastSolvedDate: '' })
+      expect(store.storageError).toBe(true)
+    })
+
+    it('does not set storageError when myrdle_streak key is absent', () => {
+      const store = usePersistenceStore()
+      const result = store.loadStreak()
+      expect(result).toEqual({ count: 0, lastSolvedDate: '' })
+      expect(store.storageError).toBe(false)
+    })
+
+    it('does not reset storageError when called with absent key after prior corruption', () => {
+      localStorage.setItem(STREAK_KEY, '{invalid-json')
+      const store = usePersistenceStore()
+      expect(store.storageError).toBe(true)
+      localStorage.removeItem(STREAK_KEY)
+      store.loadStreak()
+      expect(store.storageError).toBe(true)
+    })
+  })
+
+  describe('loadSettings', () => {
+    it('sets storageError and returns defaults on malformed JSON', () => {
+      const store = usePersistenceStore()
+      localStorage.setItem(SETTINGS_KEY, 'corrupted{{{')
+      const result = store.loadSettings()
+      expect(result).toEqual({ hardMode: false, deuteranopia: false })
+      expect(store.storageError).toBe(true)
+    })
+
+    it('does not set storageError when myrdle_settings key is absent', () => {
+      const store = usePersistenceStore()
+      const result = store.loadSettings()
+      expect(result).toEqual({ hardMode: false, deuteranopia: false })
+      expect(store.storageError).toBe(false)
+    })
+
+    it('sets storageError when settings is corrupted but streak reads correctly (AC5)', () => {
+      localStorage.setItem(SETTINGS_KEY, 'corrupted{{{')
+      localStorage.setItem(STREAK_KEY, JSON.stringify({ count: 3, lastSolvedDate: '2026-03-20' }))
+      const store = usePersistenceStore()
+      store.loadSettings()
+      const streakResult = store.loadStreak()
+      expect(store.storageError).toBe(true)
+      expect(streakResult).toEqual({ count: 3, lastSolvedDate: '2026-03-20' })
     })
   })
 

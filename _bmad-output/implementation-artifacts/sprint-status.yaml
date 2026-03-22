@@ -36,7 +36,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-19
-last_updated: 2026-03-21 (story 4.5 added via sprint change proposal)
+last_updated: 2026-03-21 (story 4.4 done)
 project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
@@ -82,7 +82,7 @@ development_status:
   4-1-game-state-persistence-and-restore: done
   4-2-streak-logic: done
   4-3-pwa-service-worker-and-offline-caching: done
-  4-4-storage-corruption-handling: backlog
+  4-4-storage-corruption-handling: done
   4-5-core-gameplay-e2e-test-coverage: backlog
   epic-4-retrospective: optional
 
