@@ -84,7 +84,7 @@ development_status:
   4-3-pwa-service-worker-and-offline-caching: done
   4-4-storage-corruption-handling: done
   4-5-core-gameplay-e2e-test-coverage: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   # Epic 5: Settings, Accessibility and Polish
   epic-5: backlog
