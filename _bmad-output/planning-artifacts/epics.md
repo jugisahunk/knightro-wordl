@@ -78,6 +78,18 @@ NFR13: The date-deterministic word selection produces the same answer for a give
 - **Boundary enforcement:** `usePersistenceStore` is the sole localStorage accessor; `useSoundManager` is called exclusively from `usePostSolveTransition`; game logic lives in composables, never in Vue components
 - **Implementation sequence:** scaffold → static data pipeline → `useGameEngine` + Vitest tests → Pinia stores → UI components Layer 1–4 → `usePostSolveTransition` → PWA service worker config
 
+### E2E Test Policy (added 2026-03-21)
+
+Starting with Epic 5, every story that introduces or modifies a user-visible feature MUST include a task for Playwright e2e tests. The story file template should include:
+
+- Task: Write Playwright e2e test(s) in `e2e/<feature>.spec.ts`
+  - Test the primary happy path in the browser
+  - Guard any build-dependent tests (SW, PWA) with `test.skip(!process.env.CI, ...)`
+
+Stories that are purely infrastructure, data pipeline, or unit-testable composables may mark this task [N/A] with a brief note.
+
+Story 4.5 backfills e2e coverage for all features shipped in Epics 1–4 (gameplay loop, post-solve ritual, persistence restore, streak display). This policy ensures new features are covered going forward.
+
 ### UX Design Requirements
 
 UX-DR1: Implement dark base color system with named design tokens defined via `@theme` in a single CSS file — bg-base (#111118), bg-surface (#1a1a22), tile-correct (#538d4e), tile-present (#b59f3b), tile-absent (#3a3a45), text-primary (#f0f0f0), text-secondary (#a0a0aa), accent-streak (#9999cc)
@@ -818,6 +830,36 @@ So that a storage failure never leaves me with a broken or silently incorrect ga
 **When** both keys are read
 **Then** only `myrdle_settings` falls back to defaults — `myrdle_streak` reads correctly
 **And** `storageError` is set to `true` (corruption in one key does not suppress reporting)
+
+---
+
+### Story 4.5: Core Gameplay End-to-End Test Coverage
+
+As a developer,
+I want Playwright smoke tests covering all shipped core user flows,
+so that regressions in gameplay, post-solve ritual, persistence, and streak are caught before they reach users.
+
+**Acceptance Criteria:**
+
+**Given** the player types a valid 5-letter word and presses Enter
+**When** the first row resolves
+**Then** all 5 tiles in row 1 have a revealed state class (correct, present, or absent)
+
+**Given** the player solves the puzzle (types the correct answer and presses Enter)
+**When** the win state triggers
+**Then** a win message or post-solve overlay is visible in the DOM
+
+**Given** the puzzle has been solved and the post-solve ritual runs
+**When** the transition completes
+**Then** both FunnelChart and EtymologyCard are rendered in the DOM
+
+**Given** the player has typed 2 letters into the current guess row
+**When** the page is reloaded
+**Then** those 2 tiles are still present in row 1 (persistence restore from localStorage)
+
+**Given** the player solves today's puzzle
+**When** the post-solve state renders
+**Then** StreakBadge shows a count ≥ 1
 
 ---
 

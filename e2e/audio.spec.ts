@@ -48,9 +48,12 @@ test.describe('audio', () => {
     }
     await page.keyboard.press('Enter')
 
-    // Board should have updated — first row tiles should be visible
-    const tiles = page.locator('.tile-row').first().locator('.tile')
-    await expect(tiles).toHaveCount(5)
+    // Board should have updated — first row tiles should have revealed states
+    const revealedTiles = page
+      .locator('.board-row')
+      .first()
+      .locator('.tile-state-correct, .tile-state-present, .tile-state-absent')
+    await expect(revealedTiles).toHaveCount(5)
 
     expect(errors).toHaveLength(0)
   })
