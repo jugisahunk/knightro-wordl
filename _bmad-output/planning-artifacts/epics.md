@@ -833,7 +833,7 @@ So that a storage failure never leaves me with a broken or silently incorrect ga
 
 ---
 
-### Story 4.5: Core Gameplay End-to-End Test Coverage
+### Story 4.5: Core Gameplay e2e Test Coverage
 
 As a developer,
 I want Playwright smoke tests covering all shipped core user flows,

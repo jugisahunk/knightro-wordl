@@ -74,7 +74,7 @@ Add story 4.5 to Epic 4 and a process policy note to `epics.md`. No rollback, no
 **Action:** ADD new story 4.5
 
 ```
-Story 4.5: Core Gameplay End-to-End Test Coverage
+Story 4.5: Core Gameplay e2e Test Coverage
 
 As a developer,
 I want Playwright smoke tests covering all shipped core user flows,
