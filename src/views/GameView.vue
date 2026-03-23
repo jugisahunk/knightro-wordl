@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { usePersistenceStore } from '@/stores/usePersistenceStore'
@@ -8,6 +8,7 @@ import GameKeyboard from '@/components/game/GameKeyboard.vue'
 import { useKeyboard } from '@/composables/useKeyboard'
 import { GamePhase } from '@/types/game'
 import StreakBadge from '@/components/ui/StreakBadge.vue'
+import SettingsPanel from '@/components/ui/SettingsPanel.vue'
 import { useAudio } from '@/composables/useAudio'
 import { usePostSolveTransition } from '@/composables/usePostSolveTransition'
 import PostSolveTransition from '@/components/layout/PostSolveTransition.vue'
@@ -66,6 +67,9 @@ function handleKeyPress(key: string): void {
 }
 
 useKeyboard(handleKeyPress)
+
+const settingsPanelOpen = ref(false)
+const triggerEl = ref<HTMLButtonElement | null>(null)
 </script>
 
 <template>
@@ -98,9 +102,19 @@ useKeyboard(handleKeyPress)
     </div>
   </main>
 
-  <!-- Top-right reserved corner: StreakBadge + SettingsPanel wired in 2.5 -->
+  <!-- Top-right reserved corner: StreakBadge + SettingsPanel -->
   <!-- Outside game-root to avoid overflow:hidden breaking position:fixed -->
-  <div class="corner-reserved"><StreakBadge /></div>
+  <div class="corner-reserved">
+    <StreakBadge />
+    <button
+      ref="triggerEl"
+      type="button"
+      class="settings-trigger"
+      :aria-label="settingsPanelOpen ? 'Close settings' : 'Open settings'"
+      @click="settingsPanelOpen = !settingsPanelOpen"
+    >⚙</button>
+    <SettingsPanel v-if="settingsPanelOpen" v-model="settingsPanelOpen" :trigger-el="triggerEl" />
+  </div>
 </template>
 
 <style scoped>
@@ -141,6 +155,21 @@ useKeyboard(handleKeyPress)
   text-align: center;
   color: var(--color-text-secondary);
   font-size: 0.75rem;
+}
+
+.settings-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  padding: 2px 4px;
+  line-height: 1;
+  margin-left: 4px;
+}
+
+.settings-trigger:hover {
+  color: var(--color-text-primary);
 }
 
 .answer-reveal {
