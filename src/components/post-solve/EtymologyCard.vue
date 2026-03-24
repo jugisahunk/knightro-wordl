@@ -42,6 +42,10 @@ onMounted(() => {
       <p class="etymology-origin">
         {{ entry ? entry.origin : 'No etymology on record for this word.' }}
       </p>
+      <p v-if="entry && entry.firstUsed" class="etymology-first-used">{{ entry.firstUsed }}</p>
+      <p v-if="entry && entry.evolution" class="etymology-evolution">{{ entry.evolution }}</p>
+      <p v-if="entry && entry.relatedWords && entry.relatedWords.length" class="etymology-related">Related: {{ entry.relatedWords.join(', ') }}</p>
+      <p v-if="entry && entry.joke" class="etymology-joke">😄 {{ entry.joke }}</p>
     </div>
   </div>
 </template>
@@ -92,5 +96,43 @@ onMounted(() => {
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--color-text-secondary);
+}
+
+.etymology-first-used {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: 8px;
+}
+
+.etymology-evolution {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+  margin-top: 8px;
+}
+
+.etymology-related {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.etymology-joke {
+  font-family: 'Lora', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-tile-border-empty);
 }
 </style>

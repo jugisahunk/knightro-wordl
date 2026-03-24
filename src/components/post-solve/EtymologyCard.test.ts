@@ -7,6 +7,10 @@ const sampleEntry: EtymologyEntry = {
   pos: 'noun',
   definition: 'A small dwelling or shelter.',
   origin: 'Old English "hūs"',
+  firstUsed: '8th century',
+  evolution: 'Derived from Proto-Germanic *husą. The meaning narrowed from "building" to "dwelling" over time.',
+  relatedWords: ['HOME', 'HAVEN', 'HOVER'],
+  joke: 'Why did the word HOUSE get promoted? Because it had great foundations.',
 }
 
 describe('EtymologyCard', () => {
@@ -92,5 +96,61 @@ describe('EtymologyCard', () => {
     const card = wrapper.find('[role="article"]')
     const label = card.attributes('aria-label') ?? ''
     expect(label.toLowerCase()).toContain('etymology for house')
+  })
+
+  // 2.9: firstUsed renders
+  it('renders firstUsed when present', () => {
+    const wrapper = mount(EtymologyCard, {
+      props: { word: 'HOUSE', entry: sampleEntry },
+    })
+    expect(wrapper.find('.etymology-first-used').text()).toContain('8th century')
+  })
+
+  // 2.10: evolution renders
+  it('renders evolution when present', () => {
+    const wrapper = mount(EtymologyCard, {
+      props: { word: 'HOUSE', entry: sampleEntry },
+    })
+    expect(wrapper.find('.etymology-evolution').text()).toContain('Proto-Germanic')
+  })
+
+  // 2.11: relatedWords renders as joined list with prefix
+  it('renders relatedWords as comma-joined list with "Related:" prefix', () => {
+    const wrapper = mount(EtymologyCard, {
+      props: { word: 'HOUSE', entry: sampleEntry },
+    })
+    const text = wrapper.find('.etymology-related').text()
+    expect(text).toContain('Related:')
+    expect(text).toContain('HOME, HAVEN, HOVER')
+  })
+
+  // 2.12: joke renders with emoji prefix
+  it('renders joke with emoji prefix', () => {
+    const wrapper = mount(EtymologyCard, {
+      props: { word: 'HOUSE', entry: sampleEntry },
+    })
+    const text = wrapper.find('.etymology-joke').text()
+    expect(text).toContain('😄')
+    expect(text).toContain('HOUSE')
+  })
+
+  // 2.13: new fields absent when entry fields are empty strings
+  it('does not render new field elements when fields are empty', () => {
+    const sparseEntry: EtymologyEntry = {
+      pos: 'noun',
+      definition: 'A small dwelling.',
+      origin: 'Old English "hūs"',
+      firstUsed: '',
+      evolution: '',
+      relatedWords: [],
+      joke: '',
+    }
+    const wrapper = mount(EtymologyCard, {
+      props: { word: 'HOUSE', entry: sparseEntry },
+    })
+    expect(wrapper.find('.etymology-first-used').exists()).toBe(false)
+    expect(wrapper.find('.etymology-evolution').exists()).toBe(false)
+    expect(wrapper.find('.etymology-related').exists()).toBe(false)
+    expect(wrapper.find('.etymology-joke').exists()).toBe(false)
   })
 })

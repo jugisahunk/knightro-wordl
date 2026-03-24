@@ -1000,6 +1000,68 @@ So that the experience is accessible regardless of sensory or motor constraints.
 **Then** a visible `focus-visible` outline is shown using `accent-streak` color (UX-DR12)
 **And** `:focus:not(:focus-visible)` has no outline — mouse clicks do not show focus rings
 
+### Story 5.5: Etymology Schema and Card Enrichment
+
+As Lord Farquaad,
+I want the etymology card to display richer word information — including when the word first appeared, how its form evolved, related words, and a joke —
+So that the post-solve ritual delivers genuine delight and linguistic discovery, not a placeholder.
+
+**Acceptance Criteria:**
+
+**Given** the `EtymologyEntry` interface in `src/types/etymology.ts`
+**When** the dev inspects it
+**Then** it defines 7 fields: `pos`, `definition`, `origin`, `firstUsed`, `evolution`, `relatedWords` (string[]), and `joke` — all required
+
+**Given** an `EtymologyEntry` with all 7 fields populated
+**When** `EtymologyCard` renders
+**Then** it displays `firstUsed`, `evolution`, `relatedWords`, and `joke` in addition to the existing `pos`, `definition`, and `origin`
+
+**Given** an entry where `firstUsed`, `evolution`, `relatedWords`, and/or `joke` are empty strings or empty array (current data shape)
+**When** `EtymologyCard` renders
+**Then** only populated fields are shown — no blank sections, no layout breakage
+
+**Given** the updated `EtymologyCard.test.ts` with an enriched mock entry
+**When** tests run
+**Then** there are passing tests for: `firstUsed` renders, `evolution` renders, `relatedWords` renders (with "Related:" prefix), `joke` renders (with 😄 prefix), and graceful fallback when new fields are absent
+
+**Given** no changes to `etymology.json`
+**When** the full test suite runs
+**Then** all pre-existing tests continue to pass
+
+**Note:** This is Story A of a two-part effort. Story B (data regeneration) will populate the new fields across all ~9,260 entries. This story ships the schema and component changes only; `etymology.json` is untouched.
+
+---
+
+### Story 5.6: Etymology Data Regeneration
+
+As Lord Farquaad,
+I want `etymology.json` to be fully enriched with real definitions, origins, first-use eras, evolution notes, related words, and jokes for every answer word,
+So that the post-solve etymology card delivers the genuine linguistic delight it was designed for, with no placeholder stubs remaining.
+
+**Acceptance Criteria:**
+
+**Given** the `scripts/enrich-etymology.ts` script
+**When** run with a valid `ANTHROPIC_API_KEY` environment variable
+**Then** it reads the 2,315 stub entries from `src/data/etymology.json`, calls the Claude API in batches, and writes enriched entries back to `src/data/etymology.json`
+
+**Given** the enrichment script
+**When** a batch call succeeds
+**Then** each enriched entry contains non-empty values for all 7 fields: `pos`, `definition`, `origin`, `firstUsed`, `evolution`, `relatedWords` (non-empty array), and `joke`
+
+**Given** the enrichment script is interrupted mid-run
+**When** re-run
+**Then** it skips already-enriched entries and continues from where it left off (resume-safe via a progress cache file)
+
+**Given** the fully enriched `src/data/etymology.json`
+**When** `npm run test:unit` runs
+**Then** all data-integrity tests pass, including the TODO assertions added in Story 5.5 (now activated) confirming all 7 fields are non-empty on every entry
+
+**Given** the enriched data
+**When** `npm run validate-data` runs
+**Then** every answer word still has a valid etymology entry — no regressions
+
+**Note:** This is Story B of a two-part effort. Story A (5.5) shipped the schema and card changes. This story populates the data. The `@anthropic-ai/sdk` package is added as a dev dependency for the enrichment script only — it is never imported in app source code.
+
 ---
 
 ## Epic 6: Analytics and History — Stories

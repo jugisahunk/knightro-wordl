@@ -78,7 +78,7 @@ describe('etymology.json', () => {
     expect(invalidKeys).toHaveLength(0)
   })
 
-  it('all entries have the correct shape { pos, definition, origin }', () => {
+  it('all entries have the correct base shape { pos, definition, origin } (extended fields added in Story B)', () => {
     const malformed = Object.entries(etymology).filter(
       ([, v]) =>
         typeof v !== 'object' ||
@@ -96,6 +96,46 @@ describe('etymology.json', () => {
       return !entry.pos || !entry.definition || !entry.origin
     })
     expect(emptyStrings).toHaveLength(0)
+  })
+
+  it('all entries have a non-empty firstUsed string', () => {
+    const invalid = Object.entries(etymology).filter(([, v]) => {
+      const entry = v as Record<string, unknown>
+      return !entry.firstUsed
+    })
+    expect(invalid).toHaveLength(0)
+  })
+
+  it('all entries have a non-empty evolution string', () => {
+    const invalid = Object.entries(etymology).filter(([, v]) => {
+      const entry = v as Record<string, unknown>
+      return !entry.evolution
+    })
+    expect(invalid).toHaveLength(0)
+  })
+
+  it('all entries have relatedWords as a non-empty array', () => {
+    const invalid = Object.entries(etymology).filter(([, v]) => {
+      const entry = v as Record<string, unknown>
+      return !Array.isArray(entry.relatedWords) || (entry.relatedWords as unknown[]).length === 0
+    })
+    expect(invalid).toHaveLength(0)
+  })
+
+  it('all entries have a non-empty joke string', () => {
+    const invalid = Object.entries(etymology).filter(([, v]) => {
+      const entry = v as Record<string, unknown>
+      return !entry.joke
+    })
+    expect(invalid).toHaveLength(0)
+  })
+
+  it('no entry has its own word in its relatedWords array', () => {
+    const invalid = Object.entries(etymology).filter(([k, v]) => {
+      const entry = v as Record<string, unknown>
+      return Array.isArray(entry.relatedWords) && (entry.relatedWords as string[]).includes(k)
+    })
+    expect(invalid).toHaveLength(0)
   })
 })
 
