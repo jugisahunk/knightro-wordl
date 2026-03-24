@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { usePersistenceStore } from '@/stores/usePersistenceStore'
@@ -9,6 +9,7 @@ import { useKeyboard } from '@/composables/useKeyboard'
 import { GamePhase } from '@/types/game'
 import StreakBadge from '@/components/ui/StreakBadge.vue'
 import SettingsPanel from '@/components/ui/SettingsPanel.vue'
+import ShortcutOverlay from '@/components/ui/ShortcutOverlay.vue'
 import { useAudio } from '@/composables/useAudio'
 import { usePostSolveTransition } from '@/composables/usePostSolveTransition'
 import PostSolveTransition from '@/components/layout/PostSolveTransition.vue'
@@ -56,6 +57,7 @@ const letterStates = computed(() => {
 })
 
 function handleKeyPress(key: string): void {
+  if (shortcutOverlayOpen.value || settingsPanelOpen.value) return
   audio.startBackground()
   if (key === 'Enter') {
     store.submitGuess(settingsStore.hardMode)
@@ -70,6 +72,23 @@ useKeyboard(handleKeyPress)
 
 const settingsPanelOpen = ref(false)
 const triggerEl = ref<HTMLButtonElement | null>(null)
+const shortcutOverlayOpen = ref(false)
+
+function handleQuestionMark(e: KeyboardEvent) {
+  if (e.repeat) return
+  if (e.key === '?') {
+    if (settingsPanelOpen.value) return
+    shortcutOverlayOpen.value = !shortcutOverlayOpen.value
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleQuestionMark)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleQuestionMark)
+})
 </script>
 
 <template>
@@ -101,6 +120,8 @@ const triggerEl = ref<HTMLButtonElement | null>(null)
       <GameKeyboard :letter-states="letterStates" @key-press="handleKeyPress" />
     </div>
   </main>
+
+  <ShortcutOverlay v-if="shortcutOverlayOpen" v-model="shortcutOverlayOpen" />
 
   <!-- Top-right reserved corner: StreakBadge + SettingsPanel -->
   <!-- Outside game-root to avoid overflow:hidden breaking position:fixed -->
