@@ -1,6 +1,6 @@
 # Story 5.3: ShortcutOverlay and Keyboard Navigation Audit
 
-Status: review
+Status: done
 
 ## Story
 
