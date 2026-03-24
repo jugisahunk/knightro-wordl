@@ -7,7 +7,7 @@
   --color-bg-surface: #1a1a22;
   --color-tile-border-empty: #3a3a45;
   --color-tile-border-active: #565663;
-  --color-tile-correct: #538d4e;
+  --color-tile-correct: #5a9654;
   --color-tile-present: #b59f3b;
   --color-tile-absent: #3a3a45;
   --color-text-primary: #f0f0f0;
@@ -34,6 +34,15 @@ html.deuteranopia {
 
 body {
   font-family: 'Inter', sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-streak);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Scope Lora to etymology card elements */

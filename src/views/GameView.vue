@@ -21,6 +21,11 @@ const audio = useAudio()
 const postSolve = usePostSolveTransition()
 const persistenceStore = usePersistenceStore()
 
+const dimMs = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+  && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ? 50
+  : BOARD_DIM_MS
+
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10)
 }
@@ -96,7 +101,7 @@ onUnmounted(() => {
     <p v-if="persistenceStore.storageError" class="storage-error">Unable to load saved data — your progress may be affected</p>
     <div
       class="board-area"
-      :style="{ opacity: postSolve.boardDimmed.value ? 0.4 : 1, transition: `opacity ${BOARD_DIM_MS}ms ease` }"
+      :style="{ opacity: postSolve.boardDimmed.value ? 0.4 : 1, transition: `opacity ${dimMs}ms ease` }"
     >
       <GameBoard
         :tile-states="store.boardState.tileStates"
@@ -104,6 +109,8 @@ onUnmounted(() => {
         :current-input="store.currentInput"
         :active-row="store.activeRow"
         :shaking-row="store.invalidGuessShake"
+        :game-phase="store.gamePhase"
+        :answer-word="store.answerWord"
       />
       <p
         v-show="store.gamePhase === GamePhase.LOST"

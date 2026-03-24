@@ -29,6 +29,13 @@ class MockAudio implements MockAudioInstance {
 
 vi.stubGlobal('Audio', MockAudio)
 
+// Default matchMedia mock — no reduced motion
+vi.stubGlobal('matchMedia', (query: string) => ({
+  matches: false,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+}))
+
 // Import after stubbing
 const { useAudio } = await import('./useAudio')
 

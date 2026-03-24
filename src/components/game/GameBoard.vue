@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import type { GuessResult, TileState } from '@/types/game'
+import { GamePhase } from '@/types/game'
 import GameTile from './GameTile.vue'
 
 const props = defineProps<{
@@ -9,9 +10,12 @@ const props = defineProps<{
   currentInput: string
   activeRow: number
   shakingRow: boolean
+  gamePhase?: GamePhase
+  answerWord?: string
 }>()
 
 const shakeActive = ref(false)
+const announceText = ref('')
 
 watch(
   () => props.shakingRow,
@@ -19,6 +23,39 @@ watch(
     shakeActive.value = val
   },
   { immediate: true },
+)
+
+watch(
+  () => props.activeRow,
+  (newRow, oldRow) => {
+    if (oldRow === undefined || newRow <= oldRow) return
+    const rowIdx = newRow - 1
+    const guess = props.guesses[rowIdx]
+    const tiles = props.tileStates[rowIdx]
+    if (!guess || !tiles) return
+
+    const stateNames: Record<string, string> = {
+      correct: 'correct',
+      present: 'present',
+      absent: 'absent',
+    }
+    const parts = guess
+      .split('')
+      .map((letter, i) => `${letter.toUpperCase()} ${stateNames[tiles[i]] ?? tiles[i]}`)
+    let text = `Row ${newRow}: ${parts.join(', ')}`
+
+    if (props.gamePhase === GamePhase.WON) {
+      text += `. Solved in ${newRow} ${newRow === 1 ? 'guess' : 'guesses'}!`
+    } else if (props.gamePhase === GamePhase.LOST) {
+      text += `. Not solved. The answer was ${props.answerWord?.toUpperCase() ?? 'unknown'}.`
+    }
+
+    // Clear then set via nextTick to guarantee screen readers detect the change
+    announceText.value = ''
+    nextTick(() => {
+      announceText.value = text
+    })
+  },
 )
 
 function getRowLetter(rowIndex: number, colIndex: number): string {
@@ -61,7 +98,7 @@ function getTileState(rowIndex: number, colIndex: number): TileState {
       />
     </div>
   </div>
-  <div aria-live="polite" aria-atomic="true" class="sr-only" id="board-announcer"></div>
+  <div aria-live="polite" aria-atomic="true" class="sr-only" id="board-announcer">{{ announceText }}</div>
 </template>
 
 <style scoped>
@@ -101,10 +138,29 @@ function getTileState(rowIndex: number, colIndex: number): TileState {
   animation: row-shake 300ms ease;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@keyframes row-flash {
+  0% { outline-color: transparent; }
+  30% { outline-color: var(--color-text-secondary); }
+  100% { outline-color: transparent; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .row-shaking {
-    animation: none;
-    outline: 2px solid var(--color-text-secondary);
+    animation: row-flash 300ms ease;
+    outline: 2px solid transparent;
+    outline-offset: -2px;
   }
 }
 </style>

@@ -179,6 +179,15 @@ onUnmounted(() => {
   cursor: not-allowed;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .settings-panel__toggle {
+    transition: none;
+  }
+  .settings-panel__toggle::after {
+    transition: none;
+  }
+}
+
 .settings-panel__note {
   margin-top: 6px;
   margin-bottom: 0;

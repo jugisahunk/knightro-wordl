@@ -11,7 +11,13 @@ export function useAudio() {
 
   let bgStarted = false
 
+  function prefersReducedMotion(): boolean {
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  }
+
   function startBackground(): void {
+    if (prefersReducedMotion()) return
     if (bgStarted) return
     bgStarted = true
     bg.play().catch(() => {
@@ -20,6 +26,7 @@ export function useAudio() {
   }
 
   function playBell(): void {
+    if (prefersReducedMotion()) return
     bell.currentTime = 0
     bell.play().catch(() => {})
   }

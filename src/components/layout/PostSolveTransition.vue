@@ -73,4 +73,14 @@ const isSolved = computed(() => gameStore.gamePhase === GamePhase.WON)
 .etymology-enter-to {
   opacity: 1;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .funnel-enter-active,
+  .etymology-enter-active {
+    transition-duration: 50ms !important;
+  }
+  .funnel-enter-from {
+    transform: none;
+  }
+}
 </style>
