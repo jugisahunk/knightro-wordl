@@ -36,20 +36,20 @@ describe('SettingsPanel', () => {
 
     it('renders hard mode toggle button with role="switch"', () => {
       const wrapper = mountPanel()
-      const btn = wrapper.find('button[role="switch"]')
+      const btn = wrapper.find('button[aria-label="Hard mode"]')
       expect(btn.exists()).toBe(true)
     })
 
     it('reflects hardMode false in aria-checked when store is false', () => {
       const wrapper = mountPanel()
-      const btn = wrapper.find('button[role="switch"]')
+      const btn = wrapper.find('button[aria-label="Hard mode"]')
       expect(btn.attributes('aria-checked')).toBe('false')
     })
 
     it('reflects hardMode true in aria-checked when store is true', () => {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify({ hardMode: true, deuteranopia: false }))
       const wrapper = mountPanel()
-      const btn = wrapper.find('button[role="switch"]')
+      const btn = wrapper.find('button[aria-label="Hard mode"]')
       expect(btn.attributes('aria-checked')).toBe('true')
     })
   })
@@ -61,7 +61,7 @@ describe('SettingsPanel', () => {
       // activeRow defaults to 0
       expect(gameStore.activeRow).toBe(0)
       await nextTick()
-      const btn = wrapper.find('button[role="switch"]')
+      const btn = wrapper.find('button[aria-label="Hard mode"]')
       expect(btn.attributes('disabled')).toBeUndefined()
     })
 
@@ -69,13 +69,13 @@ describe('SettingsPanel', () => {
       const wrapper = mountPanel()
       const settingsStore = useSettingsStore()
       expect(settingsStore.hardMode).toBe(false)
-      await wrapper.find('button[role="switch"]').trigger('click')
+      await wrapper.find('button[aria-label="Hard mode"]').trigger('click')
       expect(settingsStore.hardMode).toBe(true)
     })
 
     it('clicking toggle persists to localStorage', async () => {
       const wrapper = mountPanel()
-      await wrapper.find('button[role="switch"]').trigger('click')
+      await wrapper.find('button[aria-label="Hard mode"]').trigger('click')
       const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)!)
       expect(saved.hardMode).toBe(true)
     })
@@ -96,7 +96,7 @@ describe('SettingsPanel', () => {
       const gameStore = useGameStore()
       gameStore.activeRow = 1
       await nextTick()
-      const btn = wrapper.find('button[role="switch"]')
+      const btn = wrapper.find('button[aria-label="Hard mode"]')
       expect(btn.attributes('disabled')).toBeDefined()
     })
 
@@ -111,7 +111,7 @@ describe('SettingsPanel', () => {
       const settingsStore = useSettingsStore()
       gameStore.activeRow = 1
       await nextTick()
-      await wrapper.find('button[role="switch"]').trigger('click')
+      await wrapper.find('button[aria-label="Hard mode"]').trigger('click')
       expect(settingsStore.hardMode).toBe(false)
     })
   })
@@ -131,6 +131,37 @@ describe('SettingsPanel', () => {
       window.dispatchEvent(event)
       await nextTick()
       expect(wrapper.emitted('update:modelValue')).toEqual([[false]])
+    })
+  })
+
+  describe('deuteranopia toggle', () => {
+    it('renders deuteranopia toggle with role="switch"', () => {
+      const wrapper = mountPanel()
+      const btn = wrapper.find('button[aria-label="Deuteranopia colour scheme"]')
+      expect(btn.attributes('role')).toBe('switch')
+    })
+
+    it('clicking deuteranopia toggle calls setDeuteranopia with toggled value', async () => {
+      const wrapper = mountPanel()
+      const settingsStore = useSettingsStore()
+      expect(settingsStore.deuteranopia).toBe(false)
+      await wrapper.find('button[aria-label="Deuteranopia colour scheme"]').trigger('click')
+      expect(settingsStore.deuteranopia).toBe(true)
+    })
+
+    it('clicking deuteranopia toggle persists to localStorage', async () => {
+      const wrapper = mountPanel()
+      await wrapper.find('button[aria-label="Deuteranopia colour scheme"]').trigger('click')
+      const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)!)
+      expect(saved.deuteranopia).toBe(true)
+    })
+
+    it('aria-checked reflects store state', async () => {
+      const wrapper = mountPanel()
+      const btn = wrapper.find('button[aria-label="Deuteranopia colour scheme"]')
+      expect(btn.attributes('aria-checked')).toBe('false')
+      await btn.trigger('click')
+      expect(btn.attributes('aria-checked')).toBe('true')
     })
   })
 })

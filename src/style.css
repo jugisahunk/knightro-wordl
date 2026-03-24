@@ -23,6 +23,11 @@
   --duration-funnel-fade: 300ms;
 }
 
+html.deuteranopia {
+  --color-tile-correct: var(--color-tile-correct-d);
+  --color-tile-present: var(--color-tile-present-d);
+}
+
 :root {
   color-scheme: dark;
 }

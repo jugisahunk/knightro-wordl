@@ -91,6 +91,7 @@ onUnmounted(() => {
       <span class="settings-panel__label">Hard mode</span>
       <button
         role="switch"
+        aria-label="Hard mode"
         :aria-checked="settingsStore.hardMode"
         :disabled="isHardModeLocked || undefined"
         :aria-disabled="isHardModeLocked || undefined"
@@ -102,6 +103,17 @@ onUnmounted(() => {
     <p v-if="isHardModeLocked" class="settings-panel__note">
       Available after today's puzzle
     </p>
+    <div class="settings-panel__row">
+      <span class="settings-panel__label">Color vision</span>
+      <button
+        role="switch"
+        class="settings-panel__toggle"
+        :class="{ 'settings-panel__toggle--on': settingsStore.deuteranopia }"
+        :aria-checked="settingsStore.deuteranopia"
+        aria-label="Deuteranopia colour scheme"
+        @click="settingsStore.setDeuteranopia(!settingsStore.deuteranopia)"
+      />
+    </div>
   </div>
 </template>
 
