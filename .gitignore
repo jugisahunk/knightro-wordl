@@ -40,3 +40,8 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Enrichment script artifacts (volatile, never commit)
+scripts/enrich-progress.json
+src/data/_ety_batches/
+src/data/_ety_build.js
