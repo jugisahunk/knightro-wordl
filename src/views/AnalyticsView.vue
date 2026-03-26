@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAnalyticsData } from '@/composables/useAnalyticsData'
 import FunnelHistorySection from '@/components/analytics/FunnelHistorySection.vue'
+import StartingWordSection from '@/components/analytics/StartingWordSection.vue'
+import PastPuzzleSection from '@/components/analytics/PastPuzzleSection.vue'
 
 const router = useRouter()
 const { getAllGameRecords } = useAnalyticsData()
@@ -26,7 +28,8 @@ const records = ref(getAllGameRecords())
     <section class="analytics-content" data-testid="analytics-content">
       <p v-if="records.length > 0" class="record-count" data-testid="record-count">{{ records.length }} game{{ records.length === 1 ? '' : 's' }} played</p>
       <FunnelHistorySection :records="records" />
-      <!-- Placeholder for stories 6.3–6.4 -->
+      <StartingWordSection :records="records" />
+      <PastPuzzleSection :records="records" />
     </section>
   </main>
 </template>
