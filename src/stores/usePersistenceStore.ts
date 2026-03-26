@@ -79,12 +79,14 @@ export const usePersistenceStore = defineStore('persistence', () => {
     }
   }
 
-  function isYesterdayUTC(dateStr: string, todayStr: string): boolean {
+  function isYesterday(dateStr: string, todayStr: string): boolean {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/
     if (!datePattern.test(dateStr) || !datePattern.test(todayStr)) return false
-    const today = new Date(todayStr + 'T00:00:00Z')
+    const [y, m, d] = todayStr.split('-').map(Number)
+    const today = new Date(y, m - 1, d)
     const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
-    return yesterday.toISOString().slice(0, 10) === dateStr
+    const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`
+    return yStr === dateStr
   }
 
   function updateStreakOnWin(todayDate: string): void {
@@ -107,7 +109,7 @@ export const usePersistenceStore = defineStore('persistence', () => {
     const last = streakData.value.lastSolvedDate
     if (!last) return
     if (last === todayDate) return
-    if (isYesterdayUTC(last, todayDate)) return
+    if (isYesterday(last, todayDate)) return
     saveStreak({ count: 0, lastSolvedDate: last })
   }
 

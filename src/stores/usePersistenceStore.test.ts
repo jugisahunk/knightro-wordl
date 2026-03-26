@@ -98,7 +98,7 @@ describe('usePersistenceStore', () => {
       expect(store.streakData.count).toBe(3)
     })
 
-    it('does not reset when lastSolvedDate is yesterday (UTC)', () => {
+    it('does not reset when lastSolvedDate is yesterday', () => {
       localStorage.setItem(STREAK_KEY, JSON.stringify({ count: 3, lastSolvedDate: '2026-03-20' }))
       const store = usePersistenceStore()
       store.checkAndMaybeResetStreak('2026-03-21')

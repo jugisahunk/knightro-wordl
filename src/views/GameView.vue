@@ -28,12 +28,16 @@ const dimMs = typeof window !== 'undefined' && typeof window.matchMedia === 'fun
   ? 50
   : BOARD_DIM_MS
 
-function getTodayUTC(): string {
-  return new Date().toISOString().slice(0, 10)
+function getTodayLocal(): string {
+  const d = new Date()
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
 }
 
 onMounted(() => {
-  const date = getTodayUTC()
+  const date = getTodayLocal()
   const record = persistenceStore.loadGame(date)
   if (record) {
     store.restoreFromRecord(date, record)

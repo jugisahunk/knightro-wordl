@@ -3,7 +3,8 @@ import answers from '../src/data/answers.json' with { type: 'json' }
 
 function getTodayAnswer(): string {
   const EPOCH = new Date('2021-06-19').getTime()
-  const today = new Date().toISOString().slice(0, 10)
+  const d = new Date()
+  const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   const dayOffset = Math.floor((new Date(today).getTime() - EPOCH) / 86400000)
   const arr = answers as string[]
   return arr[((dayOffset % arr.length) + arr.length) % arr.length]

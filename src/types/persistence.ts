@@ -5,7 +5,7 @@ export interface SettingsData {
 
 export interface StreakData {
   count: number
-  lastSolvedDate: string // YYYY-MM-DD UTC
+  lastSolvedDate: string // YYYY-MM-DD local
 }
 
 export interface GameRecord {
