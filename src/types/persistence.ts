@@ -13,3 +13,7 @@ export interface GameRecord {
   solved: boolean
   funnelData: number[]
 }
+
+export interface DailyGameRecord extends GameRecord {
+  date: string // YYYY-MM-DD
+}

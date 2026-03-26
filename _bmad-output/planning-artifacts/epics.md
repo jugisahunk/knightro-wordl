@@ -1155,3 +1155,85 @@ So that vocabulary retention is reinforced beyond the single moment of the etymo
 **Given** the past puzzle browser
 **When** reviewed
 **Then** it reads exclusively from `myrdle_game_*` localStorage keys via `usePersistenceStore` — no new data model required
+
+---
+
+### Story 6.5: Accessibility Color Fix and Secondary Indicators
+
+As a colorblind player,
+I want tile and keyboard colors to be distinguishable through more than color alone,
+So that I can play the game without relying on color perception to understand tile feedback.
+
+**Acceptance Criteria:**
+
+**Given** the deuteranopia palette toggle is enabled
+**When** tiles display correct-position and wrong-position states
+**Then** the colors provide sufficient contrast that a deuteranopic user can distinguish the two states without side-by-side comparison
+
+**Given** the game board after a guess is submitted
+**When** tiles reveal their feedback state
+**Then** a secondary shape indicator (e.g. checkmark for correct, dot for present) is visible on each tile — not relying on color alone
+
+**Given** the on-screen keyboard
+**When** keys update to reflect used/unused/correct/present/absent states
+**Then** lighter keys indicate available (unused) letters and darker keys indicate eliminated letters — matching the intuitive expectation that lighter = available
+
+**Given** both normal and deuteranopia modes
+**When** only one color state (e.g. only yellow/present tiles) appears on screen with no contrasting state visible
+**Then** the secondary indicator makes the tile state unambiguous without needing a second color for comparison
+
+---
+
+### Story 6.6: Post-Solve Layout and Music Toggle
+
+As a player,
+I want the post-solve experience to fit on one screen without scrolling,
+So that I can see the funnel, board, and etymology simultaneously after solving.
+
+**Acceptance Criteria:**
+
+**Given** a completed puzzle on a desktop viewport (>= 1024px wide)
+**When** the post-solve transition completes
+**Then** a three-column layout is displayed: funnel chart (left), game board collapsed to winning row (center), etymology card (right)
+**And** no vertical scrolling is required to see all post-solve content
+
+**Given** a completed puzzle on a narrow viewport (< 1024px)
+**When** the post-solve transition completes
+**Then** the layout falls back to the current vertical stacked arrangement (board, funnel, etymology)
+
+**Given** the game header
+**When** the page loads
+**Then** a visible music on/off toggle button (speaker icon) is displayed
+**And** music is off by default
+**And** tapping the toggle starts or stops background music immediately
+
+**Given** the post-solve board on desktop
+**When** the transition completes
+**Then** the board collapses to show only the winning row (or final failed row), freeing vertical space for the three-column layout
+
+---
+
+### Story 6.7: Theme Toggle and OS Theme Responsiveness
+
+As a player,
+I want the app to respect my OS light/dark mode preference or let me toggle it manually,
+So that the app appearance matches my environment and is comfortable to use.
+
+**Acceptance Criteria:**
+
+**Given** the app loads for the first time
+**When** the OS is set to light mode
+**Then** the app renders in light mode
+
+**Given** the app loads for the first time
+**When** the OS is set to dark mode
+**Then** the app renders in dark mode
+
+**Given** the settings panel
+**When** the player selects a theme option (light, dark, or system)
+**Then** the app immediately switches to the selected theme
+**And** the preference is persisted across sessions
+
+**Given** the player has selected "system" theme
+**When** the OS theme changes (e.g. from dark to light)
+**Then** the app responds in real time without requiring a page refresh

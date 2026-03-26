@@ -9,6 +9,11 @@ const router = createRouter({
       name: 'home',
       component: GameView,
     },
+    {
+      path: '/analytics',
+      name: 'analytics',
+      component: () => import('../views/AnalyticsView.vue'),
+    },
   ],
 })
 

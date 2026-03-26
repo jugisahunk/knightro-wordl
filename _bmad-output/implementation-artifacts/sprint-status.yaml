@@ -36,7 +36,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-19
-last_updated: 2026-03-24 (story 5.4 done)
+last_updated: 2026-03-25 (story 6.2 review)
 project: knightro-wordle
 # story 2.2 review complete
 # story 2.3 created
@@ -94,12 +94,15 @@ development_status:
   5-4-accessibility-audit-and-reduced-motion-support: done
   5-5-etymology-schema-and-card-enrichment: done
   5-6-etymology-data-regeneration: done
-  epic-5-retrospective: optional
+  epic-5-retrospective: done
 
   # Epic 6: Analytics and History
-  epic-6: backlog
-  6-1-analytics-data-foundation: backlog
-  6-2-aggregated-funnel-history-view: backlog
+  epic-6: in-progress
+  6-1-analytics-data-foundation: done
+  6-2-aggregated-funnel-history-view: review
   6-3-starting-word-effectiveness-stat: backlog
   6-4-past-puzzle-browser: backlog
+  6-5-accessibility-color-fix-and-secondary-indicators: backlog
+  6-6-post-solve-layout-and-music-toggle: backlog
+  6-7-theme-toggle-and-os-theme-responsiveness: backlog
   epic-6-retrospective: optional

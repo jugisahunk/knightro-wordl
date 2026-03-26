@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useGameStore } from '@/stores/useGameStore'
 import { useSettingsStore } from '@/stores/useSettingsStore'
 import { usePersistenceStore } from '@/stores/usePersistenceStore'
@@ -15,6 +16,7 @@ import { usePostSolveTransition } from '@/composables/usePostSolveTransition'
 import PostSolveTransition from '@/components/layout/PostSolveTransition.vue'
 import { BOARD_DIM_MS } from '@/constants/timing'
 
+const router = useRouter()
 const store = useGameStore()
 const settingsStore = useSettingsStore()
 const audio = useAudio()
@@ -135,6 +137,19 @@ onUnmounted(() => {
   <div class="corner-reserved">
     <StreakBadge />
     <button
+      type="button"
+      class="analytics-trigger"
+      data-testid="analytics-trigger"
+      aria-label="View analytics"
+      @click="router.push('/analytics')"
+    >
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <rect x="1" y="10" width="4" height="7" rx="1" fill="currentColor" />
+        <rect x="7" y="6" width="4" height="11" rx="1" fill="currentColor" />
+        <rect x="13" y="1" width="4" height="16" rx="1" fill="currentColor" />
+      </svg>
+    </button>
+    <button
       ref="triggerEl"
       type="button"
       class="settings-trigger"
@@ -183,6 +198,28 @@ onUnmounted(() => {
   text-align: center;
   color: var(--color-text-secondary);
   font-size: 0.75rem;
+}
+
+.analytics-trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding: 2px 4px;
+  line-height: 1;
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.analytics-trigger:hover {
+  color: var(--color-text-primary);
+}
+
+.analytics-trigger:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .settings-trigger {
