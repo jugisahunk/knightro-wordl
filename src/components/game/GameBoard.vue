@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import type { GuessResult, TileState } from '@/types/game'
 import { GamePhase } from '@/types/game'
 import GameTile from './GameTile.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   tileStates: GuessResult[]
   guesses: string[]
   currentInput: string
@@ -12,7 +12,18 @@ const props = defineProps<{
   shakingRow: boolean
   gamePhase?: GamePhase
   answerWord?: string
-}>()
+  collapseToRow?: number | null
+}>(), {
+  collapseToRow: null,
+})
+
+const isCollapsed = computed(() => props.collapseToRow !== null && props.collapseToRow !== undefined)
+const visibleRows = computed(() => {
+  if (isCollapsed.value) {
+    return [props.collapseToRow!]
+  }
+  return [0, 1, 2, 3, 4, 5]
+})
 
 const shakeActive = ref(false)
 const announceText = ref('')
@@ -80,20 +91,25 @@ function getTileState(rowIndex: number, colIndex: number): TileState {
 </script>
 
 <template>
-  <div role="grid" aria-label="Myrdl game board" class="game-board">
+  <div
+    role="grid"
+    aria-label="Myrdl game board"
+    :class="['game-board', { 'game-board--collapsed': isCollapsed }]"
+    :data-testid="isCollapsed ? 'collapsed-board' : undefined"
+  >
     <div
-      v-for="rowIndex in 6"
+      v-for="rowIndex in visibleRows"
       :key="rowIndex"
       role="row"
-      :class="{ 'row-shaking': shakeActive && rowIndex - 1 === activeRow }"
+      :class="{ 'row-shaking': shakeActive && rowIndex === activeRow }"
       class="board-row"
       @animationend="shakeActive = false"
     >
       <GameTile
         v-for="colIndex in 5"
         :key="colIndex"
-        :letter="getRowLetter(rowIndex - 1, colIndex - 1)"
-        :state="getTileState(rowIndex - 1, colIndex - 1)"
+        :letter="getRowLetter(rowIndex, colIndex - 1)"
+        :state="getTileState(rowIndex, colIndex - 1)"
         :reveal-index="colIndex - 1"
       />
     </div>
@@ -106,6 +122,11 @@ function getTileState(rowIndex: number, colIndex: number): TileState {
   display: grid;
   grid-template-rows: repeat(6, 62px);
   gap: 5px;
+  transition: grid-template-rows 500ms ease;
+}
+
+.game-board--collapsed {
+  grid-template-rows: 62px;
 }
 
 .board-row {

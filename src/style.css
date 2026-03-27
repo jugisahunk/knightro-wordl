@@ -16,6 +16,8 @@
   --color-tile-correct-d: #4a90d9;
   --color-tile-present-d: #e8a030;
   --color-key-unused: #3a3a4a;
+  --color-bg-elevated: #1a1a2e;
+  --color-border: #444444;
 
   /* Duration tokens */
   --duration-tile-flip: 400ms;
@@ -24,7 +26,31 @@
   --duration-funnel-fade: 300ms;
 }
 
+html.theme-light {
+  color-scheme: light;
+  --color-bg-base: #f5f5f7;
+  --color-bg-surface: #ffffff;
+  --color-tile-border-empty: #d3d6da;
+  --color-tile-border-active: #878a8c;
+  --color-tile-correct: #6aaa64;
+  --color-tile-present: #c9b458;
+  --color-tile-absent: #787c7e;
+  --color-text-primary: #1a1a1b;
+  --color-text-secondary: #6b6f73;
+  --color-accent-streak: #6366a0;
+  --color-key-unused: #d3d6da;
+  --color-bg-elevated: #ffffff;
+  --color-border: #d3d6da;
+}
+
 html.deuteranopia {
+  --color-tile-correct: var(--color-tile-correct-d);
+  --color-tile-present: var(--color-tile-present-d);
+}
+
+html.theme-light.deuteranopia {
+  --color-tile-correct-d: #3a7bc8;
+  --color-tile-present-d: #c07b1a;
   --color-tile-correct: var(--color-tile-correct-d);
   --color-tile-present: var(--color-tile-present-d);
 }

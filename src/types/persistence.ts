@@ -1,6 +1,8 @@
 export interface SettingsData {
   hardMode: boolean
   deuteranopia: boolean
+  musicEnabled?: boolean
+  theme?: 'light' | 'dark' | 'system'
 }
 
 export interface StreakData {

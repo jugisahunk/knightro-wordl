@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest'
 import { defineComponent } from 'vue'
 import { mount } from '@vue/test-utils'
+import { setActivePinia, createPinia } from 'pinia'
 
 interface MockAudioInstance {
   loop: boolean
@@ -56,6 +57,8 @@ function mountWithAudio() {
 describe('useAudio — prefers-reduced-motion: reduce', () => {
   beforeEach(() => {
     instances = []
+    localStorage.clear()
+    setActivePinia(createPinia())
   })
 
   afterEach(() => {

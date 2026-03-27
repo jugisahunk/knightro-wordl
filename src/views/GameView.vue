@@ -28,6 +28,37 @@ const dimMs = typeof window !== 'undefined' && typeof window.matchMedia === 'fun
   ? 50
   : BOARD_DIM_MS
 
+const isDesktop = ref(
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+    ? window.matchMedia('(min-width: 1024px)').matches
+    : false,
+)
+
+function handleDesktopQuery(e: MediaQueryListEvent) {
+  isDesktop.value = e.matches
+}
+
+let desktopMql: MediaQueryList | null = null
+onMounted(() => {
+  if (typeof window.matchMedia === 'function') {
+    desktopMql = window.matchMedia('(min-width: 1024px)')
+    desktopMql.addEventListener('change', handleDesktopQuery)
+  }
+})
+
+onUnmounted(() => {
+  desktopMql?.removeEventListener('change', handleDesktopQuery)
+})
+
+const isDesktopPostSolve = computed(() =>
+  isDesktop.value && (postSolve.showFunnel.value || postSolve.showEtymology.value),
+)
+
+const collapseToRow = computed(() => {
+  if (!isDesktopPostSolve.value) return null
+  return Math.max(0, store.currentRow - 1)
+})
+
 function getTodayLocal(): string {
   const d = new Date()
   const year = d.getFullYear()
@@ -106,6 +137,7 @@ onUnmounted(() => {
   <main class="game-root">
     <p v-if="persistenceStore.storageError" class="storage-error">Unable to load saved data — your progress may be affected</p>
     <div
+      v-if="!isDesktopPostSolve"
       class="board-area"
       :style="{ opacity: postSolve.boardDimmed.value ? 0.4 : 1, transition: `opacity ${dimMs}ms ease` }"
     >
@@ -128,8 +160,29 @@ onUnmounted(() => {
       :show-funnel="postSolve.showFunnel.value"
       :show-etymology="postSolve.showEtymology.value"
       :dismiss="postSolve.dismiss"
-    />
-    <div class="keyboard-area">
+      :horizontal="isDesktopPostSolve"
+    >
+      <template v-if="isDesktopPostSolve" #center>
+        <div class="board-area-collapsed">
+          <GameBoard
+            :tile-states="store.boardState.tileStates"
+            :guesses="store.boardState.guesses"
+            :current-input="store.currentInput"
+            :active-row="store.activeRow"
+            :shaking-row="false"
+            :game-phase="store.gamePhase"
+            :answer-word="store.answerWord"
+            :collapse-to-row="collapseToRow"
+          />
+          <p
+            v-show="store.gamePhase === GamePhase.LOST"
+            class="answer-reveal"
+            aria-live="polite"
+          >{{ store.answerWord.toUpperCase() }}</p>
+        </div>
+      </template>
+    </PostSolveTransition>
+    <div v-if="!isDesktopPostSolve" class="keyboard-area">
       <GameKeyboard :letter-states="letterStates" @key-press="handleKeyPress" />
     </div>
   </main>
@@ -140,6 +193,13 @@ onUnmounted(() => {
   <!-- Outside game-root to avoid overflow:hidden breaking position:fixed -->
   <div class="corner-reserved">
     <StreakBadge />
+    <button
+      type="button"
+      class="music-toggle"
+      data-testid="music-toggle"
+      :aria-label="settingsStore.musicEnabled ? 'Turn music off' : 'Turn music on'"
+      @click="settingsStore.setMusicEnabled(!settingsStore.musicEnabled)"
+    >{{ settingsStore.musicEnabled ? '\uD83D\uDD0A' : '\uD83D\uDD07' }}</button>
     <button
       type="button"
       class="analytics-trigger"
@@ -157,6 +217,7 @@ onUnmounted(() => {
       ref="triggerEl"
       type="button"
       class="settings-trigger"
+      data-testid="settings-trigger"
       :aria-label="settingsPanelOpen ? 'Close settings' : 'Open settings'"
       @click="settingsPanelOpen = !settingsPanelOpen"
     >⚙</button>
@@ -191,6 +252,13 @@ onUnmounted(() => {
   padding-top: 10vh;
 }
 
+.board-area-collapsed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .keyboard-area {
   display: flex;
   justify-content: center;
@@ -202,6 +270,27 @@ onUnmounted(() => {
   text-align: center;
   color: var(--color-text-secondary);
   font-size: 0.75rem;
+}
+
+.music-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  padding: 2px 4px;
+  line-height: 1;
+  margin-left: 4px;
+}
+
+.music-toggle:hover {
+  color: var(--color-text-primary);
+}
+
+.music-toggle:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .analytics-trigger {

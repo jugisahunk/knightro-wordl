@@ -170,15 +170,28 @@ describe('usePersistenceStore', () => {
       const store = usePersistenceStore()
       localStorage.setItem(SETTINGS_KEY, 'corrupted{{{')
       const result = store.loadSettings()
-      expect(result).toEqual({ hardMode: false, deuteranopia: false })
+      expect(result).toEqual({ hardMode: false, deuteranopia: false, musicEnabled: false, theme: 'system' })
       expect(store.storageError).toBe(true)
     })
 
     it('does not set storageError when myrdle_settings key is absent', () => {
       const store = usePersistenceStore()
       const result = store.loadSettings()
-      expect(result).toEqual({ hardMode: false, deuteranopia: false })
+      expect(result).toEqual({ hardMode: false, deuteranopia: false, musicEnabled: false, theme: 'system' })
       expect(store.storageError).toBe(false)
+    })
+
+    it('DEFAULT_SETTINGS includes theme as system', () => {
+      const store = usePersistenceStore()
+      const result = store.loadSettings()
+      expect(result.theme).toBe('system')
+    })
+
+    it('loadSettings returns persisted theme value', () => {
+      const store = usePersistenceStore()
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ hardMode: false, deuteranopia: false, theme: 'dark' }))
+      const result = store.loadSettings()
+      expect(result.theme).toBe('dark')
     })
 
     it('sets storageError when settings is corrupted but streak reads correctly (AC5)', () => {

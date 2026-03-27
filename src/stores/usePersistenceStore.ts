@@ -27,7 +27,7 @@ function safeWrite(key: string, value: unknown): boolean {
   }
 }
 
-const DEFAULT_SETTINGS: SettingsData = { hardMode: false, deuteranopia: false }
+const DEFAULT_SETTINGS: SettingsData = { hardMode: false, deuteranopia: false, musicEnabled: false, theme: 'system' }
 const DEFAULT_STREAK: StreakData = { count: 0, lastSolvedDate: '' }
 
 export const usePersistenceStore = defineStore('persistence', () => {

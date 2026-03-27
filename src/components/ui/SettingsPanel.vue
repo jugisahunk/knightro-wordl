@@ -11,6 +11,10 @@ const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
 const settingsStore = useSettingsStore()
 const gameStore = useGameStore()
 
+// Theme options
+const themeOptions = ['light', 'dark', 'system'] as const
+type ThemeValue = typeof themeOptions[number]
+
 // Local reactive state
 const panelEl = ref<HTMLElement | null>(null)
 
@@ -29,6 +33,26 @@ function handleHardModeToggle() {
   if (!isHardModeLocked.value) {
     settingsStore.setHardMode(!settingsStore.hardMode)
   }
+}
+
+function handleThemeKeyDown(e: KeyboardEvent) {
+  const idx = themeOptions.indexOf(settingsStore.theme as ThemeValue)
+  let next = idx
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault()
+    next = (idx + 1) % themeOptions.length
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault()
+    next = (idx - 1 + themeOptions.length) % themeOptions.length
+  } else {
+    return
+  }
+  settingsStore.setTheme(themeOptions[next])
+  nextTick(() => {
+    const group = panelEl.value?.querySelector('[data-testid="theme-selector"]')
+    const btns = group?.querySelectorAll<HTMLElement>('button')
+    btns?.[next]?.focus()
+  })
 }
 
 function handleKeyDown(e: KeyboardEvent) {
@@ -114,6 +138,30 @@ onUnmounted(() => {
         @click="settingsStore.setDeuteranopia(!settingsStore.deuteranopia)"
       />
     </div>
+    <div class="settings-panel__row">
+      <span class="settings-panel__label">Theme</span>
+    </div>
+    <div
+      role="radiogroup"
+      aria-label="Theme"
+      data-testid="theme-selector"
+      class="settings-panel__theme-group"
+      @keydown="handleThemeKeyDown"
+    >
+      <button
+        v-for="option in themeOptions"
+        :key="option"
+        role="radio"
+        :aria-checked="settingsStore.theme === option"
+        :data-testid="`theme-option-${option}`"
+        :tabindex="settingsStore.theme === option ? 0 : -1"
+        class="settings-panel__theme-btn"
+        :class="{ 'settings-panel__theme-btn--active': settingsStore.theme === option }"
+        @click="settingsStore.setTheme(option)"
+      >
+        {{ option.charAt(0).toUpperCase() + option.slice(1) }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -123,8 +171,8 @@ onUnmounted(() => {
   top: calc(100% + 8px);
   right: 0;
   width: 220px;
-  background-color: var(--color-bg-elevated, #1a1a2e);
-  border: 1px solid var(--color-border, #444);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 12px 16px;
   z-index: 51;
@@ -184,6 +232,36 @@ onUnmounted(() => {
     transition: none;
   }
   .settings-panel__toggle::after {
+    transition: none;
+  }
+}
+
+.settings-panel__theme-group {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.settings-panel__theme-btn {
+  flex: 1;
+  padding: 4px 0;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.settings-panel__theme-btn--active {
+  background-color: var(--color-tile-correct);
+  color: var(--color-bg-surface);
+  border-color: var(--color-tile-correct);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings-panel__theme-btn {
     transition: none;
   }
 }

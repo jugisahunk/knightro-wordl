@@ -108,6 +108,69 @@ describe('GameBoard', () => {
     })
   })
 
+  describe('collapseToRow prop', () => {
+    it('renders all 6 rows when collapseToRow is null (default)', () => {
+      const board = mount(GameBoard, { props: defaultProps })
+      expect(board.findAll('[role="row"]')).toHaveLength(6)
+    })
+
+    it('renders only 1 row when collapseToRow is set', () => {
+      const tileStates: GuessResult[] = [
+        ['correct', 'correct', 'correct', 'correct', 'correct'],
+        ['absent', 'absent', 'absent', 'absent', 'absent'],
+        ['present', 'present', 'present', 'present', 'present'],
+      ]
+      const board = mount(GameBoard, {
+        props: {
+          ...defaultProps,
+          tileStates,
+          guesses: ['crane', 'birds', 'feast'],
+          activeRow: 3,
+          collapseToRow: 0,
+        },
+      })
+      expect(board.findAll('[role="row"]')).toHaveLength(1)
+    })
+
+    it('renders the correct row content when collapsed', () => {
+      const tileStates: GuessResult[] = [
+        ['absent', 'absent', 'absent', 'absent', 'absent'],
+        ['correct', 'correct', 'correct', 'correct', 'correct'],
+      ]
+      const board = mount(GameBoard, {
+        props: {
+          ...defaultProps,
+          tileStates,
+          guesses: ['crane', 'feast'],
+          activeRow: 2,
+          collapseToRow: 1,
+        },
+      })
+      const tiles = board.findAll('[role="gridcell"]')
+      expect(tiles).toHaveLength(5)
+      expect(tiles[0].find('.tile-letter').text()).toBe('F')
+    })
+
+    it('adds data-testid="collapsed-board" when collapsed', () => {
+      const board = mount(GameBoard, {
+        props: { ...defaultProps, collapseToRow: 0 },
+      })
+      expect(board.find('[data-testid="collapsed-board"]').exists()).toBe(true)
+    })
+
+    it('does not add data-testid="collapsed-board" when not collapsed', () => {
+      const board = mount(GameBoard, { props: defaultProps })
+      expect(board.find('[data-testid="collapsed-board"]').exists()).toBe(false)
+    })
+
+    it('applies game-board--collapsed class when collapsed', () => {
+      const board = mount(GameBoard, {
+        props: { ...defaultProps, collapseToRow: 2 },
+      })
+      expect(board.find('.game-board').classes()).toContain('game-board--collapsed')
+    })
+  })
+
   describe('shake animation', () => {
     it('applies row-shaking class to active row when shakingRow is true', async () => {
       const board = mount(GameBoard, {

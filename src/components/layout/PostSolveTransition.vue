@@ -7,11 +7,14 @@ import EtymologyCard from '@/components/post-solve/EtymologyCard.vue'
 import etymologyJson from '@/data/etymology.json'
 import type { EtymologyEntry } from '@/types/etymology'
 
-defineProps<{
+withDefaults(defineProps<{
   showFunnel: boolean
   showEtymology: boolean
   dismiss: () => void
-}>()
+  horizontal: boolean
+}>(), {
+  horizontal: false,
+})
 
 const gameStore = useGameStore()
 
@@ -25,7 +28,7 @@ const isSolved = computed(() => gameStore.gamePhase === GamePhase.WON)
 </script>
 
 <template>
-  <div class="post-solve-container">
+  <div :class="['post-solve-container', { 'post-solve-horizontal': horizontal }]" :data-testid="horizontal ? 'post-solve-horizontal' : undefined">
     <Transition name="funnel">
       <FunnelChart
         v-if="showFunnel"
@@ -33,6 +36,7 @@ const isSolved = computed(() => gameStore.gamePhase === GamePhase.WON)
         :solved="isSolved"
       />
     </Transition>
+    <slot v-if="horizontal" name="center" />
     <Transition name="etymology">
       <EtymologyCard
         v-if="showEtymology"
@@ -50,6 +54,20 @@ const isSolved = computed(() => gameStore.gamePhase === GamePhase.WON)
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.post-solve-horizontal {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 24px;
+  max-height: 100dvh;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.post-solve-horizontal :deep(.etymology-card) {
+  max-width: none;
 }
 
 .funnel-enter-active {

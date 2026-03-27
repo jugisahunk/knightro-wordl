@@ -134,6 +134,51 @@ describe('SettingsPanel', () => {
     })
   })
 
+  describe('theme selector', () => {
+    it('renders theme radio group with three options', () => {
+      const wrapper = mountPanel()
+      const group = wrapper.find('[data-testid="theme-selector"]')
+      expect(group.exists()).toBe(true)
+      expect(group.attributes('role')).toBe('radiogroup')
+      const buttons = group.findAll('button')
+      expect(buttons).toHaveLength(3)
+    })
+
+    it('renders light, dark, and system options with correct testids', () => {
+      const wrapper = mountPanel()
+      expect(wrapper.find('[data-testid="theme-option-light"]').exists()).toBe(true)
+      expect(wrapper.find('[data-testid="theme-option-dark"]').exists()).toBe(true)
+      expect(wrapper.find('[data-testid="theme-option-system"]').exists()).toBe(true)
+    })
+
+    it('system option has aria-checked="true" by default', () => {
+      const wrapper = mountPanel()
+      const systemBtn = wrapper.find('[data-testid="theme-option-system"]')
+      expect(systemBtn.attributes('aria-checked')).toBe('true')
+    })
+
+    it('clicking light option calls setTheme with light', async () => {
+      const wrapper = mountPanel()
+      const settingsStore = useSettingsStore()
+      await wrapper.find('[data-testid="theme-option-light"]').trigger('click')
+      expect(settingsStore.theme).toBe('light')
+    })
+
+    it('clicking option persists to localStorage', async () => {
+      const wrapper = mountPanel()
+      await wrapper.find('[data-testid="theme-option-dark"]').trigger('click')
+      const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)!)
+      expect(saved.theme).toBe('dark')
+    })
+
+    it('active option reflects store state after click', async () => {
+      const wrapper = mountPanel()
+      await wrapper.find('[data-testid="theme-option-light"]').trigger('click')
+      expect(wrapper.find('[data-testid="theme-option-light"]').attributes('aria-checked')).toBe('true')
+      expect(wrapper.find('[data-testid="theme-option-system"]').attributes('aria-checked')).toBe('false')
+    })
+  })
+
   describe('deuteranopia toggle', () => {
     it('renders deuteranopia toggle with role="switch"', () => {
       const wrapper = mountPanel()
