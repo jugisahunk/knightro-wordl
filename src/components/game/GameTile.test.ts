@@ -70,7 +70,7 @@ describe('GameTile', () => {
 
     it('displays the letter', () => {
       const tile = mount(GameTile, { props: { letter: 'r', state: 'correct', revealIndex: 0 } })
-      expect(tile.text()).toBe('R')
+      expect(tile.find('.tile-letter').text()).toBe('R')
     })
   })
 
@@ -95,6 +95,39 @@ describe('GameTile', () => {
     it('applies tile-state-absent class', () => {
       const tile = mount(GameTile, { props: { letter: 's', state: 'absent', revealIndex: 0 } })
       expect(tile.classes()).toContain('tile-state-absent')
+    })
+  })
+
+  describe('secondary indicator', () => {
+    it('correct state renders indicator with ✓ content and aria-hidden', () => {
+      const tile = mount(GameTile, { props: { letter: 'r', state: 'correct', revealIndex: 0 } })
+      const indicator = tile.find('[data-testid="tile-indicator"]')
+      expect(indicator.exists()).toBe(true)
+      expect(indicator.text()).toBe('✓')
+      expect(indicator.attributes('aria-hidden')).toBe('true')
+    })
+
+    it('present state renders indicator with · content and aria-hidden', () => {
+      const tile = mount(GameTile, { props: { letter: 'e', state: 'present', revealIndex: 0 } })
+      const indicator = tile.find('[data-testid="tile-indicator"]')
+      expect(indicator.exists()).toBe(true)
+      expect(indicator.text()).toBe('·')
+      expect(indicator.attributes('aria-hidden')).toBe('true')
+    })
+
+    it('absent state renders no indicator', () => {
+      const tile = mount(GameTile, { props: { letter: 's', state: 'absent', revealIndex: 0 } })
+      expect(tile.find('[data-testid="tile-indicator"]').exists()).toBe(false)
+    })
+
+    it('filled state renders no indicator', () => {
+      const tile = mount(GameTile, { props: { letter: 'a', state: 'filled', revealIndex: 0 } })
+      expect(tile.find('[data-testid="tile-indicator"]').exists()).toBe(false)
+    })
+
+    it('empty state renders no indicator', () => {
+      const tile = mount(GameTile, { props: { letter: '', state: 'empty', revealIndex: 0 } })
+      expect(tile.find('[data-testid="tile-indicator"]').exists()).toBe(false)
     })
   })
 

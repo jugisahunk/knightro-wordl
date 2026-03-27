@@ -102,9 +102,9 @@ describe('GameBoard', () => {
       })
       const rows = board.findAll('[role="row"]')
       const submittedRow = rows[0].findAll('[role="gridcell"]')
-      expect(submittedRow[0].text()).toBe('C')
-      expect(submittedRow[1].text()).toBe('R')
-      expect(submittedRow[2].text()).toBe('A')
+      expect(submittedRow[0].find('.tile-letter').text()).toBe('C')
+      expect(submittedRow[1].find('.tile-letter').text()).toBe('R')
+      expect(submittedRow[2].find('.tile-letter').text()).toBe('A')
     })
   })
 

@@ -61,7 +61,7 @@ function handleClick(): void {
   font-weight: 700;
   font-size: 0.8125rem; /* 13px */
   text-transform: uppercase;
-  background-color: var(--color-bg-surface);
+  background-color: var(--color-key-unused);
   color: var(--color-text-primary);
   transition:
     filter 0.1s,
@@ -81,7 +81,7 @@ function handleClick(): void {
 }
 
 .keyboard-key--absent {
-  background-color: var(--color-tile-absent);
+  background-color: var(--color-bg-surface);
 }
 
 .keyboard-key:hover {

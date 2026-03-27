@@ -69,6 +69,12 @@ onUnmounted(() => {
     role="gridcell"
   >
     <span v-if="letter" class="tile-letter">{{ letter.toUpperCase() }}</span>
+    <span
+      v-if="displayState === 'correct' || displayState === 'present'"
+      class="tile-indicator"
+      data-testid="tile-indicator"
+      aria-hidden="true"
+    >{{ displayState === 'correct' ? '✓' : '·' }}</span>
   </div>
 </template>
 
@@ -81,6 +87,18 @@ onUnmounted(() => {
   justify-content: center;
   border: 2px solid var(--color-tile-border-empty);
   background-color: var(--color-bg-surface);
+  position: relative;
+}
+
+.tile-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .tile-letter {

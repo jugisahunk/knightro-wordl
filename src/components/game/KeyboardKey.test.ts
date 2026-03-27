@@ -75,6 +75,18 @@ describe('KeyboardKey', () => {
     })
   })
 
+  describe('key color hierarchy', () => {
+    it('default (unused) key does not have keyboard-key--absent class', () => {
+      const wrapper = mount(KeyboardKey, { props: { label: 'Q', keyValue: 'q', state: 'default' } })
+      expect(wrapper.classes()).not.toContain('keyboard-key--absent')
+    })
+
+    it('absent key has keyboard-key--absent class', () => {
+      const wrapper = mount(KeyboardKey, { props: { label: 'B', keyValue: 'b', state: 'absent' } })
+      expect(wrapper.classes()).toContain('keyboard-key--absent')
+    })
+  })
+
   describe('wide variant', () => {
     it('wide=true adds keyboard-key--wide class', () => {
       const wrapper = mount(KeyboardKey, {

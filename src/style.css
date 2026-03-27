@@ -15,6 +15,7 @@
   --color-accent-streak: #9999cc;
   --color-tile-correct-d: #4a90d9;
   --color-tile-present-d: #e8a030;
+  --color-key-unused: #3a3a4a;
 
   /* Duration tokens */
   --duration-tile-flip: 400ms;
