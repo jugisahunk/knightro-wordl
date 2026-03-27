@@ -56,7 +56,7 @@ const isDesktopPostSolve = computed(() =>
 
 const collapseToRow = computed(() => {
   if (!isDesktopPostSolve.value) return null
-  return Math.max(0, store.currentRow - 1)
+  return Math.max(0, store.activeRow - 1)
 })
 
 function getTodayLocal(): string {

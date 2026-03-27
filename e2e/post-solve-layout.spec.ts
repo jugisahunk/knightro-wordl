@@ -76,6 +76,23 @@ test.describe('desktop post-solve layout', () => {
     await expect(rows).toHaveCount(1)
   })
 
+  test('collapsed board row displays the winning word letters', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/')
+    await page.waitForLoadState('domcontentloaded')
+
+    const answer = getTodayAnswer()
+    for (const key of answer.split('')) {
+      await page.keyboard.press(key)
+    }
+    await page.keyboard.press('Enter')
+
+    await expect(page.getByTestId('collapsed-board')).toBeVisible({ timeout: 3000 })
+    const tiles = page.getByTestId('collapsed-board').locator('.tile-letter')
+    const letters = await tiles.allTextContents()
+    expect(letters.join('')).toBe(answer.toUpperCase())
+  })
+
   test('three-column layout has three child areas', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/')
