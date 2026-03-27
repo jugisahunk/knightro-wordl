@@ -8,6 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/knightro-wordl/',
   plugins: [
     vue(),
     vueDevTools(),
@@ -21,22 +22,22 @@ export default defineConfig({
         theme_color: '#1a1a22',
         background_color: '#1a1a22',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/knightro-wordl/',
         icons: [
           {
-            src: '/pwa-assets/pwa-192.png',
+            src: '/knightro-wordl/pwa-assets/pwa-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/pwa-assets/pwa-512.png',
+            src: '/knightro-wordl/pwa-assets/pwa-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: '/favicon.svg',
+            src: '/knightro-wordl/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any',
